@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // If you're using Expo or ensure you have the equivalent in your project
+import AnswerCallScreen from './AnswerCallScreen'
 
 const FakeCallScreen = ({ onHangUp, onAccept }) => {
 
@@ -32,7 +33,7 @@ const FakeCallScreen = ({ onHangUp, onAccept }) => {
         <TouchableOpacity onPress={onHangUp} style={[styles.button, styles.declineButton]}>
           <Ionicons name="md-close" size={50} color="#fff" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={onAccept} style={[styles.button, styles.acceptButton]}>
+        <TouchableOpacity onPress={() => onAccept('Caller')} style={[styles.button, styles.acceptButton]}>
           <Ionicons name="md-call" size={50} color="#fff" />
         </TouchableOpacity>
       </View>
