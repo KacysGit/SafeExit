@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // If you're using Expo or ensure you have the equivalent in your project
 
 const FakeCallScreen = ({ onHangUp, onAccept }) => {
@@ -17,8 +17,16 @@ const FakeCallScreen = ({ onHangUp, onAccept }) => {
   return (
     <View style={styles.fullScreen}>
       <View style={styles.topContainer}>
-        <Text style={styles.time}>{currentTime}</Text>
+        <Image
+            source={require('.././assets/sunset.jpg')} // Replace with your caller image path
+            style={styles.callerImage}
+          />
+        <Text style={styles.smollNotice}> Incoming call</Text>        
         <Text style={styles.callerName}>Unknown</Text>
+        <Text style={styles.smollNotice}> Mobile +1 214-519-7328</Text>
+      </View>
+      <View style={styles.middleContainer}>        
+        <Text style={styles.time}>{currentTime}</Text>
       </View>
       <View style={styles.bottomContainer}>
         <TouchableOpacity onPress={onHangUp} style={[styles.button, styles.declineButton]}>
@@ -55,12 +63,23 @@ const styles = StyleSheet.create({
   },
   time: {
     color: 'white',
-    fontSize: 36,
+    fontSize: 16,
     fontWeight: '600',
   },
   callerName: {
     color: 'white',
     fontSize: 28,
+    fontWeight: '400',
+  },  
+  callerImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: 20,
+  },
+  smollNotice: {
+    color: 'white',
+    fontSize: 12,
     fontWeight: '400',
   },
   bottomContainer: {
@@ -70,17 +89,22 @@ const styles = StyleSheet.create({
     paddingBottom: 40, // Adjust padding as needed
     width: '100%',
   },
+  middleContainer: {
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    paddingBottom: 40, // Adjust padding as needed
+    width: '100%',
+  },
   button: {
     justifyContent: 'center',
     alignItems: 'center',
     marginHorizontal: 20,
-    width: 75, // Adjust the size to match your example
-    height: 75, // Adjust the size to match your example
-    borderRadius: 37.5, // This should be half the width/height to be perfectly round
+    borderRadius: 100, // This should be half the width/height to be perfectly round
     padding: 15,
   },
   declineButton: {
     backgroundColor: '#FF3B30', // Adjust the color to match your example
+    alignItems: 'center'
   },
   acceptButton: {
     backgroundColor: '#30D158', // Adjust the color to match your example
