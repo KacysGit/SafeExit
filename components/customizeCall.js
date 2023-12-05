@@ -1,7 +1,6 @@
 // This file adds the button titled "Customize Call"
 // * Set trigger
 // * Customize name
-// * Customize Ringtone
 
 import React, { useState, useRef } from "react";
 import {
