@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // Ensure you have the icons in your project
+import { ImageBackground } from 'react-native';
+
 
 const AnswerCallScreen = ({ callerName, onHangUp }) => {
   const [callTime, setCallTime] = useState(0);
@@ -21,15 +23,20 @@ const AnswerCallScreen = ({ callerName, onHangUp }) => {
   };
 
   return (
-    <View style={styles.fullScreen}>
-      <View style={styles.topContainer}>
-        <Text style={styles.callerName}>{callerName}</Text>
-        <Text style={styles.time}>{formatTime(callTime)}</Text>
-      </View>
-      <TouchableOpacity onPress={onHangUp} style={styles.hangUpButton}>
-        <Ionicons name="md-call" size={50} color="#fff" />
-      </TouchableOpacity>
-    </View>
+    <ImageBackground 
+      source={require('../assets/acceptCallBackground.jpg')} // Replace with the correct path to your image
+      style={styles.fullScreen}
+    >
+        <View style={styles.fullScreen}>
+        <View style={styles.topContainer}>
+            <Text style={styles.callerName}>{callerName}</Text>
+            <Text style={styles.time}>{formatTime(callTime)}</Text>
+        </View>
+        <TouchableOpacity onPress={onHangUp} style={styles.hangUpButton}>
+            <Ionicons name="md-call" size={50} color="#fff" />
+        </TouchableOpacity>
+        </View>
+    </ImageBackground>
   );
 };
 
@@ -38,7 +45,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#000',
   },
   topContainer: {
     alignItems: 'center',
