@@ -57,10 +57,12 @@ const AnswerCallScreen = ({ callerName, onHangUp }) => {
 
 // Define a separate component for buttons with labels
 const ButtonWithLabel = ({ iconName, label }) => (
-  <TouchableOpacity style={styles.button}>
-    <Ionicons name={iconName} size={40} color="white" />
+  <View style={styles.buttonContainer}>
+    <TouchableOpacity style={styles.button}>
+      <Ionicons name={iconName} size={40} color="white" />
+    </TouchableOpacity>
     <Text style={styles.label}>{label}</Text>
-  </TouchableOpacity>
+  </View>
 );
 
 const styles = StyleSheet.create({
@@ -128,8 +130,8 @@ const styles = StyleSheet.create({
   },
   label: {
     color: 'white',
-    fontSize: 12, // Adjust the size as needed
-    marginTop: 4, // Space between icon and label
+    fontSize: 13, // Adjust the size as needed
+    marginTop: 0, // Space between icon and label
     textAlign: 'center',
   },
 });
