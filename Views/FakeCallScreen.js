@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // If you're using Expo or ensure you have the equivalent in your project
 import RotatedHangUpIcon from '../components/RotatedHangupIcon';
 
-const FakeCallScreen = ({ onHangUp, onAccept }) => {
+const FakeCallScreen = ({ onHangUp, onAccept, callerName, callerNumber, callerImage }) => {
   const [currentTime, setCurrentTime] = useState('');
 
   useEffect(() => {
@@ -17,13 +17,10 @@ const FakeCallScreen = ({ onHangUp, onAccept }) => {
   return (
     <View style={styles.fullScreen}>
       <View style={styles.topContainer}>
-        <Image
-          source={require('.././assets/sunset.jpg')} // Replace with your caller image path
-          style={styles.callerImage}
-        />
+        <Image source={callerImage} style={styles.callerImage} />
         <Text style={styles.smollNotice}> Incoming call</Text>
-        <Text style={styles.callerName}>Unknown</Text>
-        <Text style={styles.smollNotice}> Mobile +1 214-519-7328</Text>
+        <Text style={styles.callerName}>{callerName}</Text>
+        <Text style={styles.smollNotice}> Mobile {callerNumber}</Text>
       </View>
       <View style={styles.middleContainer}>
         <Text style={styles.time}>{currentTime}</Text>

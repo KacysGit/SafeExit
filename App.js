@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
-import CustomizeCall from "./components/customizeCall";
+import CustomizeCall from "./Views/customizeCall";
 import Header from "./components/header";
 import FakeCallScreen from './Views/FakeCallScreen';
 import AnswerCallScreen from './Views/AnswerCallScreen'; // Make sure this path is correct
@@ -8,6 +8,12 @@ import AnswerCallScreen from './Views/AnswerCallScreen'; // Make sure this path 
 export default function App() {
   const [showFakeCall, setShowFakeCall] = React.useState(false);
   const [showAnswerCall, setShowAnswerCall] = React.useState(false);
+  const [callerInfo, setCallerInfo] = React.useState({
+    name: 'Unknown',
+    phoneNumber: '+1 214-519-7328',
+    image: require('./assets/sunset.jpg'), 
+  });
+  
 
   // Define a function to handle the call accept action
   const handleAcceptCall = (caller) => {
@@ -16,25 +22,35 @@ export default function App() {
     // You can pass the caller name to the AnswerCallScreen if needed
   };
 
+  // Function to initiate a fake call
+  const initiateFakeCall = () => {
+    setShowFakeCall(true);
+  };
+
   return (
     <View style={styles.container}>
       {showFakeCall ? (
         <FakeCallScreen
           onHangUp={() => setShowFakeCall(false)}
-          onAccept={handleAcceptCall} // Pass the new function to handle accept
+          onAccept={handleAcceptCall}
+          callerName={callerInfo.name || 'Unknown'} // Fallback to 'Unknown' if name is empty
+          callerNumber={callerInfo.phoneNumber || '+1 214-519-7328'} // Fallback to default number if phoneNumber is empty
+          callerImage={callerInfo.image}
         />
+      
       ) : showAnswerCall ? (
         <AnswerCallScreen
-          callerName="Caller" // Pass the caller name
-          onHangUp={() => setShowAnswerCall(false)} // Function to handle hang up from answer call screen
+          callerName={callerInfo.name}
+          onHangUp={() => setShowAnswerCall(false)}
         />
       ) : (
         <>
           <Header />
-          <CustomizeCall />
+          <CustomizeCall onCustomize={(info) => setCallerInfo(info)} />
+
           <TouchableOpacity
             style={styles.button}
-            onPress={() => setShowFakeCall(true)}
+            onPress={initiateFakeCall} // Updated to use initiateFakeCall function
           >
             <Text style={styles.buttonText}>Call Me</Text>
           </TouchableOpacity>
