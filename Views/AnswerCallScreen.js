@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; // Ensure you have the icons in your project
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { ImageBackground } from 'react-native';
-
+import RotatedHangUpIcon from '../components/RotatedHangupIcon';
 
 const AnswerCallScreen = ({ callerName, onHangUp }) => {
   const [callTime, setCallTime] = useState(0);
@@ -27,15 +27,42 @@ const AnswerCallScreen = ({ callerName, onHangUp }) => {
       source={require('../assets/acceptCallBackground.jpg')} // Replace with the correct path to your image
       style={styles.fullScreen}
     >
-        <View style={styles.fullScreen}>
+      <View style={styles.fullScreen}>
         <View style={styles.topContainer}>
-            <Text style={styles.callerName}>{callerName}</Text>
-            <Text style={styles.time}>{formatTime(callTime)}</Text>
+          <Text style={styles.callerName}>{callerName}</Text>
+          <Text style={styles.time}>{formatTime(callTime)}</Text>
         </View>
+
+        {/* Buttons */}
+        <View style={styles.buttonsCenterContainer}>
+          <View style={styles.buttonsContainer}>
+            <TouchableOpacity style={styles.button}>
+              <Ionicons name="mic-off" size={40} color="white" />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button}>
+              <Ionicons name="keypad" size={40} color="white" />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button}>
+              <Ionicons name="volume-high" size={40} color="white" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.buttonsContainer}>
+            <TouchableOpacity style={styles.button}>
+             <Ionicons name="add-outline" size={45} color="white" />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button}>
+              <Ionicons name="videocam" size={40} color="white" />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button}>
+             <Ionicons name="person-circle-outline" size={40} color="white" /> 
+            </TouchableOpacity>
+          </View>
+        </View>
+
         <TouchableOpacity onPress={onHangUp} style={styles.hangUpButton}>
-            <Ionicons name="md-call" size={50} color="#fff" />
+          <RotatedHangUpIcon /> 
         </TouchableOpacity>
-        </View>
+      </View>
     </ImageBackground>
   );
 };
@@ -48,6 +75,8 @@ const styles = StyleSheet.create({
   },
   topContainer: {
     alignItems: 'center',
+    flex: 1,
+    marginTop: 100,
   },
   callerName: {
     color: 'white',
@@ -75,7 +104,25 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 5,
   },
-  // ... rest of your styles
+  buttonsCenterContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 250,
+  },
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  button: {
+    width: 70,
+    height: 70,
+    backgroundColor: '#44424c', // Adjust button background color
+    borderRadius: 35, // Half the width/height to make it round
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
 
 export default AnswerCallScreen;

@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // If you're using Expo or ensure you have the equivalent in your project
-import AnswerCallScreen from './AnswerCallScreen'
+import RotatedHangUpIcon from '../components/RotatedHangupIcon';
 
 const FakeCallScreen = ({ onHangUp, onAccept }) => {
-
   const [currentTime, setCurrentTime] = useState('');
 
   useEffect(() => {
@@ -19,19 +18,19 @@ const FakeCallScreen = ({ onHangUp, onAccept }) => {
     <View style={styles.fullScreen}>
       <View style={styles.topContainer}>
         <Image
-            source={require('.././assets/sunset.jpg')} // Replace with your caller image path
-            style={styles.callerImage}
-          />
-        <Text style={styles.smollNotice}> Incoming call</Text>        
+          source={require('.././assets/sunset.jpg')} // Replace with your caller image path
+          style={styles.callerImage}
+        />
+        <Text style={styles.smollNotice}> Incoming call</Text>
         <Text style={styles.callerName}>Unknown</Text>
         <Text style={styles.smollNotice}> Mobile +1 214-519-7328</Text>
       </View>
-      <View style={styles.middleContainer}>        
+      <View style={styles.middleContainer}>
         <Text style={styles.time}>{currentTime}</Text>
       </View>
       <View style={styles.bottomContainer}>
         <TouchableOpacity onPress={onHangUp} style={[styles.button, styles.declineButton]}>
-          <Ionicons name="md-close" size={50} color="#fff" />
+          <RotatedHangUpIcon /> 
         </TouchableOpacity>
         <TouchableOpacity onPress={() => onAccept('Caller')} style={[styles.button, styles.acceptButton]}>
           <Ionicons name="md-call" size={50} color="#fff" />
@@ -115,7 +114,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 5,
   },
-
 });
 
 export default FakeCallScreen;
