@@ -40,7 +40,7 @@ export default function App() {
       
       ) : showAnswerCall ? (
         <AnswerCallScreen
-          callerName={callerInfo.name}
+          callerName={callerInfo.name || 'Unknown'} // Fallback to 'Unknown' if name is empty
           onHangUp={() => setShowAnswerCall(false)}
         />
       ) : (
