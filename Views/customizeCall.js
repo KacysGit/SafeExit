@@ -13,21 +13,22 @@ import {
     Button,
     TouchableOpacity
 } from "react-native";
+import BackButton from "../components/backButton";
+import Header from "../components/header";
 
-export default function CustomizeCall({ onCustomize }) {
-    const [name, setName] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [image, setImage] = useState(require('../assets/sunset.jpg')); // Default image
-  
-    const handleCustomize = () => {
-        console.log('Customize button clicked', { name, phoneNumber, image }); // Add this line to log the state values
-        onCustomize({
-          name,
-          phoneNumber,
-          image,
-        });
-      };
-      
+export default function CustomizeCall({ onCustomize, onBack }) {
+  const [name, setName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [image, setImage] = useState(require('../assets/sunset.jpg')); // Default image
+
+  const handleCustomize = () => {
+    // Assuming you want to keep the default image if not changed
+    onCustomize({
+      name: name || 'Unknown',
+      phoneNumber: phoneNumber || '(469) 735-1438',
+      image: image // Or a logic to check if image was changed
+    });
+  };   
   
     const handleImagePick = () => {
       // Implement the logic to pick an image and update the state
@@ -37,6 +38,7 @@ export default function CustomizeCall({ onCustomize }) {
   
     return (
       <View>
+        <Header />
         <TextInput
         placeholder="Name"
         value={name}
@@ -60,6 +62,7 @@ export default function CustomizeCall({ onCustomize }) {
         <TouchableOpacity style={style.button} onPress={handleCustomize}>
           <Text style={style.buttonText}>Customize Call</Text>
         </TouchableOpacity>
+        <BackButton onPress={onBack} />
       </View>
     );
   }
