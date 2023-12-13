@@ -17,7 +17,17 @@ export default function CustomizeCall({ onCustomize, onBack, callerInfo }) {
     });
   };
   
-  
+  // Function to handle reverting to default
+  const revertToDefault = () => {
+    setName('Unknown'); // Replace with actual default name
+    setPhoneNumber('1 (469) 739-1437'); // Replace with actual default number
+    setImage(require('../assets/sunset.jpg')); // Replace with actual default image
+    onCustomize({
+      name: 'Unknown',
+      phoneNumber: '1 (469) 739-1437',
+      image: require('../assets/sunset.jpg'),
+    });
+  };
 
     
   const handleImagePick = async () => {
@@ -55,9 +65,17 @@ export default function CustomizeCall({ onCustomize, onBack, callerInfo }) {
         <Image source={{ uri: image.uri }} style={commonStyles.image} />
       )}
 
-      <TouchableOpacity style={commonStyles.button} onPress={handleCustomize}>
-        <Text style={commonStyles.buttonText}>Customize Call</Text>
-      </TouchableOpacity>
+      <TouchableOpacity style={commonStyles.button} onPress={() => handleNameChange(name)}>
+          <Text style={commonStyles.buttonText}>Edit Caller's Name</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={commonStyles.button} onPress={() => handlePhoneNumberChange(phoneNumber)}>
+          <Text style={commonStyles.buttonText}>Edit Caller's Number</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={commonStyles.button} onPress={revertToDefault}>
+          <Text style={commonStyles.buttonText}>Revert to Default</Text>
+        </TouchableOpacity>
 
       <View style={commonStyles.footer}>
         <BackButton onPress={onBack} />
