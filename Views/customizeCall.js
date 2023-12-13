@@ -50,6 +50,16 @@ export default function CustomizeCall({ onCustomize, onBack, callerInfo }) {
     await pickImage(handleImagePicked);
   };
 
+  // Function to close the name edit modal
+  const closeNameModal = () => {
+    setIsNameModalVisible(false);
+  };
+
+  // Function to close the phone number edit modal
+  const closePhoneNumberModal = () => {
+    setIsPhoneNumberModalVisible(false);
+  };
+
   const handleImagePicked = (uri) => {
     handleCustomize(uri);
   };
@@ -99,20 +109,32 @@ export default function CustomizeCall({ onCustomize, onBack, callerInfo }) {
         animationType="slide"
         transparent={true}
         visible={isNameModalVisible}
-        onRequestClose={() => setIsNameModalVisible(false)}
+        onRequestClose={closeNameModal}
       >
-        <View style={modalStyles.modalView}>
-          <TextInput
-            style={commonStyles.input}
-            value={name}
-            onChangeText={(newName) => handleNameChange(newName)}
-          />
-          <TouchableOpacity
-            style={commonStyles.button}
-            onPress={() => setIsNameModalVisible(false)}
-          >
-            <Text style={commonStyles.buttonText}>Save</Text>
-          </TouchableOpacity>
+        <View style={modalStyles.centeredView}>
+          <View style={modalStyles.modalView}>
+            <TextInput
+              style={commonStyles.input}
+              value={name}
+              onChangeText={(newName) => handleNameChange(newName)}
+              placeholder="Enter Caller's Name"
+            />
+            <View style={modalStyles.buttonRow}>
+            <TouchableOpacity
+                style={commonStyles.button}
+                onPress={closeNameModal} // Save and close the modal
+              >
+                <Text style={commonStyles.buttonText}>Save</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={commonStyles.button}
+                onPress={closeNameModal}
+              >
+                <Text style={commonStyles.buttonText}>Cancel</Text>
+              </TouchableOpacity>
+             
+            </View>
+          </View>
         </View>
       </Modal>
 
@@ -128,6 +150,7 @@ export default function CustomizeCall({ onCustomize, onBack, callerInfo }) {
             style={commonStyles.input}
             value={phoneNumber}
             onChangeText={(newPhoneNumber) => handlePhoneNumberChange(newPhoneNumber)}
+            placeholder="Enter Caller's Number"
           />
           <TouchableOpacity
             style={commonStyles.button}
@@ -135,6 +158,13 @@ export default function CustomizeCall({ onCustomize, onBack, callerInfo }) {
           >
             <Text style={commonStyles.buttonText}>Save</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity
+                style={commonStyles.button}
+                onPress={closePhoneNumberModal}
+              >
+                <Text style={commonStyles.buttonText}>Cancel</Text>
+              </TouchableOpacity>
         </View>
       </Modal>
     </View>
@@ -143,18 +173,29 @@ export default function CustomizeCall({ onCustomize, onBack, callerInfo }) {
 
 const modalStyles = StyleSheet.create({
   modalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
+    marginTop: '50%', // Center the modal on the screen vertically
+    marginHorizontal: '10%', // Add horizontal margins
+    backgroundColor: 'grey', // Semi-transparent white
+    borderRadius: 30,
     padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
+    alignItems: 'center',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5
+    elevation: 5,
+    borderWidth: 3,
+    borderColor: 'black',
   },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.82)', // Semi-transparent overlay
+ 
+  },
+  
 });

@@ -51,6 +51,16 @@ export const commonStyles = StyleSheet.create({
     justifyContent: 'flex-start', // Align button to the left
     alignItems: 'center', // Center items vertically
   },
+  input: {
+    // ... other styles you might have
+    borderWidth: 1,  // Add this line
+    borderColor: 'black',  // And this line
+    // You might also want to add some padding and margin for better aesthetics
+    padding: 10,
+    marginVertical: 10,
+    backgroundColor: 'white', // Set the background color to white for the text input
+  },
+
 });
 
 // Add any other styles or theme-related exports here
