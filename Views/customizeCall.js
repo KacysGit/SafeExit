@@ -5,6 +5,7 @@ import Header from "../components/header";
 import { pickImage } from '../components/imageUpload';
 import { commonStyles } from '../components/styles'; // Make sure the path is correct
 import EditableTextInput from "../components/EditableTextInput";
+import EditNumberInput from "../components/EditNumberInput";
 import EditableImage from "../components/EditableImage";
 
 export default function CustomizeCall({ onCustomize, onBack, callerInfo }) {
@@ -84,13 +85,15 @@ export default function CustomizeCall({ onCustomize, onBack, callerInfo }) {
       />
       
       {/* Editable Text Input for Caller's Phone Number */}
-      <EditableTextInput
+      <EditNumberInput
         value={callerInfo.phoneNumber}
         onSave={handleSavePhoneNumber}
         placeholder="Enter Caller's Number"
-        keyboardType="phone-pad" // Set keyboard type for phone number input
+        keyboardType="phone-pad"
         style={commonStyles.input}
+        isPhoneNumber={true}
       />
+
 
       <TouchableOpacity style={commonStyles.button} onPress={revertToDefault}>
         <Text style={commonStyles.buttonText}>Revert to Default</Text>
