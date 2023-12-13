@@ -4,6 +4,8 @@ const useAppState = () => {
   const [showFakeCall, setShowFakeCall] = useState(false);
   const [showAnswerCall, setShowAnswerCall] = useState(false);
   const [showCustomizeCall, setShowCustomizeCall] = useState(false);
+
+  
   const [callerInfo, setCallerInfo] = useState({
     name: 'Unknown',
     phoneNumber: '(469) 735-1438',
@@ -14,14 +16,14 @@ const useAppState = () => {
   const toggleAnswerCall = (value) => setShowAnswerCall(value);
   const toggleCustomizeCall = (value) => setShowCustomizeCall(value);
 
-  // Add the following setters to the return statement if not already added
+  
   return {
     showFakeCall,
-    setShowFakeCall, // Ensure this setter is returned
+    setShowFakeCall, 
     showAnswerCall,
-    setShowAnswerCall, // Ensure this setter is returned
+    setShowAnswerCall,
     showCustomizeCall,
-    setShowCustomizeCall, // Ensure this setter is returned
+    setShowCustomizeCall, 
     callerInfo,
     setCallerInfo,
     toggleFakeCall,

@@ -14,7 +14,7 @@ export default function CustomizeCall({ onCustomize, onBack }) {
     onCustomize({
       name: name || 'Unknown',
       phoneNumber: phoneNumber || '(469) 735-1438',
-      image: image
+      image: image.uri ? image : require('../assets/sunset.jpg')
     });
   };
 
@@ -25,8 +25,15 @@ export default function CustomizeCall({ onCustomize, onBack }) {
 
   
   const handleImagePicked = (uri) => {
-    setImage({ uri: uri }); // Update the local state with the new image URI
-    // Optionally update the customization state here or wait for user to press "Customize Call"
+    // You don't need to call setImage here if you're immediately calling onCustomize
+    // setImage({ uri }); // This line can be removed if you don't need to show the image in CustomizeCall component
+  
+    // Call onCustomize which is actually `updateCallerInfo` in `App`
+    onCustomize({
+      name, // keep the current name
+      phoneNumber, // keep the current phone number
+      image: { uri }, // update the image with the new URI
+    });
   };
 
   return (

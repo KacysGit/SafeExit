@@ -28,10 +28,18 @@ export default function App() {
     setShowCustomizeCall(false);
   };
 
+  const updateCallerInfo = (newInfo) => {
+    setCallerInfo(prevInfo => ({
+      ...prevInfo,
+      ...newInfo, // This will update the callerInfo with newInfo
+    }));
+  };
+
+
   return (
     <View style={styles.container}>
       {showCustomizeCall ? (
-        <CustomizeCall onCustomize={setCallerInfo} onBack={() => toggleCustomizeCall(false)} />
+        <CustomizeCall onCustomize={updateCallerInfo} onBack={() => toggleCustomizeCall(false)} />
       ) : showAnswerCall ? (
         <AnswerCallScreen callerInfo={callerInfo} onHangUp={resetToHomeScreen} />
       ) : showFakeCall ? (
