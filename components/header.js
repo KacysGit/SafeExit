@@ -33,5 +33,6 @@ const styles = StyleSheet.create({
       color: "white", // Color of the header text
       fontSize: 24, // Font size of the header text
       fontWeight: "bold", // Bold font weight for header text
+      margin: 10
     },
 })

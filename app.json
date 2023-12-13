@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "SafeExit",
-    "slug": "SafeExit",
+    "name": "SafelyExit",
+    "slug": "SafelyExit",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
