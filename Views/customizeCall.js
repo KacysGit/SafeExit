@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { View, TextInput, Text, TouchableOpacity } from "react-native";
+import { View, TextInput, Text, TouchableOpacity, Image } from "react-native";
 import BackButton from "../components/backButton";
 import Header from "../components/header";
+import { pickImage } from '../components/imageUpload';
 import { commonStyles } from '../components/styles'; // Make sure the path is correct
 
 export default function CustomizeCall({ onCustomize, onBack }) {
@@ -16,10 +17,16 @@ export default function CustomizeCall({ onCustomize, onBack }) {
       image: image
     });
   };
+
+    
+  const handleImagePick = async () => {
+    await pickImage(handleImagePicked); // Use the handleImagePicked function here
+  };
+
   
-  const handleImagePick = () => {
-    // Your image picking logic
-    setImage(require('../assets/sunset.jpg'));
+  const handleImagePicked = (uri) => {
+    setImage({ uri: uri }); // Update the local state with the new image URI
+    // Optionally update the customization state here or wait for user to press "Customize Call"
   };
 
   return (
@@ -37,12 +44,20 @@ export default function CustomizeCall({ onCustomize, onBack }) {
         onChangeText={setPhoneNumber}
         style={commonStyles.input}
       />
+      
       <TouchableOpacity style={commonStyles.button} onPress={handleImagePick}>
-        <Text style={commonStyles.buttonText}>Pick an Image</Text>
+        <Text style={commonStyles.buttonText}>Upload Caller Image</Text>
       </TouchableOpacity>
+      
+      {/* This is where the picked image will be rendered */}
+      {image.uri && (
+        <Image source={{ uri: image.uri }} style={commonStyles.image} />
+      )}
+
       <TouchableOpacity style={commonStyles.button} onPress={handleCustomize}>
-        <Text style={commonStyles.buttonText}>Edit Name</Text>
+        <Text style={commonStyles.buttonText}>Customize Call</Text>
       </TouchableOpacity>
+
       <View style={commonStyles.footer}>
         <BackButton onPress={onBack} />
       </View>

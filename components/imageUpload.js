@@ -2,36 +2,53 @@ import React, { useState } from 'react';
 import { View, Button, Image, StyleSheet, Text } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
-const imageUpload = ({ onImagePicked }) => {
-  const [selectedImage, setSelectedImage] = useState(null);
-
-  const pickImage = async () => {
-    // Ask for permission to access the media library 
+// This function is exported for use in other components
+export const pickImage = async (onImagePicked) => {
+  try {
     const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-
     if (permissionResult.granted === false) {
       alert("You've refused to allow this app to access your photos!");
       return;
     }
 
-    const pickerResult = await ImagePicker.launchImageLibraryAsync();
+    const pickerResult = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+    });
 
-    if (pickerResult.cancelled === true) {
+    // Note the changes here from 'cancelled' to 'canceled' and the use of 'assets'
+    if (pickerResult.canceled) {
       return;
     }
 
-    setSelectedImage({ localUri: pickerResult.uri });
+    // Access the uri from the first item in the assets array
+    const uri = pickerResult.assets[0].uri;
+    onImagePicked(uri); // Call the onImagePicked function with the selected image URI
+  } catch (error) {
+    console.error("ImagePicker Error: ", error);
+    alert("An error occurred while picking the image.");
+  }
+};
+
+
+
+const ImageUpload = ({ onImagePicked }) => {
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  // Call the pickImage function and pass setSelectedImage to update the state
+  const handlePickImage = async () => {
+    await pickImage(setSelectedImage);
   };
 
   const confirmImageSelection = () => {
     if (selectedImage) {
-      onImagePicked(selectedImage.localUri);
+      onImagePicked(selectedImage.localUri); // Call the prop function with the selected image URI
     }
   };
 
   return (
     <View style={styles.container}>
-      <Button title="Pick an image from camera roll" onPress={pickImage} />
+      <Button title="Pick an image from camera roll" onPress={handlePickImage} />
       {selectedImage && (
         <>
           <Image source={{ uri: selectedImage.localUri }} style={styles.image} />
@@ -44,7 +61,6 @@ const imageUpload = ({ onImagePicked }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -56,4 +72,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default imageUpload;
+export default ImageUpload;
