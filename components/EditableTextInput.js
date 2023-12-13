@@ -1,11 +1,16 @@
 // EditableTextInput.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; // Make sure you have this installed
+import { Ionicons } from '@expo/vector-icons';
 
 const EditableTextInput = ({ value, onSave, placeholder, keyboardType = 'default', style }) => {
   const [editable, setEditable] = useState(false);
   const [localValue, setLocalValue] = useState(value);
+
+  useEffect(() => {
+    // Update localValue whenever the value prop changes
+    setLocalValue(value);
+  }, [value]);
 
   const handleSave = () => {
     onSave(localValue);
