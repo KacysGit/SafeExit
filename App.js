@@ -39,7 +39,11 @@ export default function App() {
   return (
     <View style={styles.container}>
       {showCustomizeCall ? (
-        <CustomizeCall onCustomize={updateCallerInfo} onBack={() => toggleCustomizeCall(false)} />
+        <CustomizeCall
+        onCustomize={setCallerInfo}
+        onBack={() => toggleCustomizeCall(false)}
+        callerInfo={callerInfo} // Pass callerInfo as a prop
+      />
       ) : showAnswerCall ? (
         <AnswerCallScreen callerInfo={callerInfo} onHangUp={resetToHomeScreen} />
       ) : showFakeCall ? (

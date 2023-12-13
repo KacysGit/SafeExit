@@ -5,18 +5,19 @@ import Header from "../components/header";
 import { pickImage } from '../components/imageUpload';
 import { commonStyles } from '../components/styles'; // Make sure the path is correct
 
-export default function CustomizeCall({ onCustomize, onBack }) {
+export default function CustomizeCall({ onCustomize, onBack, callerInfo }) {
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [image, setImage] = useState(require('../assets/sunset.jpg')); // Default image
 
-  const handleCustomize = () => {
+  const handleCustomize = (newImageUri) => {
     onCustomize({
-      name: name || 'Unknown',
-      phoneNumber: phoneNumber || '(469) 735-1438',
-      image: image.uri ? image : require('../assets/sunset.jpg')
+      ...callerInfo, // Now callerInfo is coming from props
+      image: newImageUri ? { uri: newImageUri } : callerInfo.image,
     });
   };
+  
+  
 
     
   const handleImagePick = async () => {
@@ -25,16 +26,9 @@ export default function CustomizeCall({ onCustomize, onBack }) {
 
   
   const handleImagePicked = (uri) => {
-    // You don't need to call setImage here if you're immediately calling onCustomize
-    // setImage({ uri }); // This line can be removed if you don't need to show the image in CustomizeCall component
-  
-    // Call onCustomize which is actually `updateCallerInfo` in `App`
-    onCustomize({
-      name, // keep the current name
-      phoneNumber, // keep the current phone number
-      image: { uri }, // update the image with the new URI
-    });
+    handleCustomize(uri); // Pass the new image URI to handleCustomize
   };
+  
 
   return (
     <View style={commonStyles.container}>
