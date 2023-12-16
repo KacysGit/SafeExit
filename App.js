@@ -51,12 +51,14 @@ export default function App() {
       ) : (
         <>
           <Header />
-          <TouchableOpacity style={styles.button} onPress={() => toggleCustomizeCall(true)}>
-            <Text style={styles.buttonText}>Customize Call</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => toggleFakeCall(true)}>
-            <Text style={styles.buttonText}>Call</Text>
-          </TouchableOpacity>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.button} onPress={() => toggleCustomizeCall(true)}>
+              <Text style={styles.buttonText}>Customize Call</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={() => toggleFakeCall(true)}>
+              <Text style={styles.buttonText}>Call</Text>
+            </TouchableOpacity>
+          </View>
         </>
       )}
     </View>
@@ -69,15 +71,17 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     display: "flex",
   },
+  buttonContainer: {
+    alignItems: 'center', // This will horizontally center your buttons within this container
+    marginTop: 20
+  },
   button: {
-    margin: 10,
-    alignContent: "center",
+    marginVertical: 10, // Vertical margin for spacing between buttons
     padding: 10,
     borderWidth: 2,
     borderRadius: 10,
-    alignSelf: "stretch",
     backgroundColor: "red",
-    width: '80%'
+    width: '80%', // Set a specific width for the buttons
   },
   buttonText: {
     fontSize: 30,
