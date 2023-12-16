@@ -36,21 +36,24 @@ export default function CustomizeCall({ onCustomize, onBack, callerInfo }) {
 
   const revertToDefault = () => {
     const defaultName = 'Unknown';
-    const defaultPhoneNumber = '1 (469) 739-1437';
-    const defaultImageUri = Image.resolveAssetSource(require('../assets/sunset.jpg')).uri;
+    const defaultPhoneNumber = '(469) 735-1438';
+    
+    // No need to use Image.resolveAssetSource, directly use the require
+    const defaultImage = require('../assets/sunset.jpg');
     
     // Update the state variables
     setName(defaultName);
     setPhoneNumber(defaultPhoneNumber);
-    setImage(defaultImage); // Set the default image uri directly
+    setImage(defaultImage); // Pass the result of require directly
     
     // Update the callerInfo object that is being passed down as props
     updateCallerInfo({
       name: defaultName,
       phoneNumber: defaultPhoneNumber,
-      image: { uri: defaultImageUri },
+      image: defaultImage, // Pass the result of require directly
     });
   };
+  
 
 
   // Function to handle saving the edited name
@@ -77,7 +80,7 @@ export default function CustomizeCall({ onCustomize, onBack, callerInfo }) {
       )}
 
       <EditableImage
-        imageUri={image}
+        imageUri={image} // Pass the entire image object directly
         onImageSelected={handleImageSelected}
         style={commonStyles.image}
       />

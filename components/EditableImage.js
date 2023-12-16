@@ -21,7 +21,7 @@ const EditableImage = ({ imageUri, onImageSelected, style }) => {
 
   return (
     <TouchableOpacity style={[styles.container, style]} onPress={handleImagePick}>
-      <Image source={imageSource} style={styles.image} />
+      <Image source={imageUri} style={styles.image} />
       <Ionicons name="pencil" size={30} color="black" style={styles.icon} />
     </TouchableOpacity>
   );
