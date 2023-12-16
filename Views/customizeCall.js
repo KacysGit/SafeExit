@@ -38,9 +38,6 @@ export default function CustomizeCall({ onCustomize, onBack, callerInfo }) {
     const defaultName = 'Unknown';
     const defaultPhoneNumber = '(469) 735-1438';
     
-    // No need to use Image.resolveAssetSource, directly use the require
-    const defaultImage = require('../assets/sunset.jpg');
-    
     // Update the state variables
     setName(defaultName);
     setPhoneNumber(defaultPhoneNumber);
@@ -53,6 +50,7 @@ export default function CustomizeCall({ onCustomize, onBack, callerInfo }) {
       image: defaultImage, // Pass the result of require directly
     });
   };
+  
   
 
 
@@ -68,8 +66,11 @@ export default function CustomizeCall({ onCustomize, onBack, callerInfo }) {
 
   // Function to handle the image selection
   const handleImageSelected = (newImageUri) => {
-    updateCallerInfo({ image: { uri: newImageUri } });
+    if (typeof newImageUri === 'string') {
+      updateCallerInfo({ image: { uri: newImageUri } });
+    }
   };
+  
 
   return (
     <View style={commonStyles.container}>
@@ -117,31 +118,4 @@ export default function CustomizeCall({ onCustomize, onBack, callerInfo }) {
   );
 }
 
-const modalStyles = StyleSheet.create({
-  modalView: {
-    marginTop: '50%', // Center the modal on the screen vertically
-    marginHorizontal: '10%', // Add horizontal margins
-    backgroundColor: 'grey', // Semi-transparent white
-    borderRadius: 30,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    borderWidth: 3,
-    borderColor: 'black',
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.82)', // Semi-transparent overlay
- 
-  },
-  
-});
+

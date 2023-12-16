@@ -17,11 +17,11 @@ const EditableImage = ({ imageUri, onImageSelected, style }) => {
   };
 
   // Use default image if imageUri is not set
-  const imageSource = imageUri ? { uri: imageUri } : defaultImage;
+  const imageSource = typeof imageUri === 'string' ? { uri: imageUri } : defaultImage;
 
   return (
     <TouchableOpacity style={[styles.container, style]} onPress={handleImagePick}>
-      <Image source={imageUri} style={styles.image} />
+      <Image source={imageSource} style={styles.image} />
       <Ionicons name="pencil" size={30} color="black" style={styles.icon} />
     </TouchableOpacity>
   );
