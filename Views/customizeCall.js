@@ -11,9 +11,8 @@ import EditableImage from "../components/EditableImage";
 export default function CustomizeCall({ onCustomize, onBack, callerInfo }) {
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [image, setImage] = useState(require('../assets/sunset.jpg')); // Default image
-  const [isNameModalVisible, setIsNameModalVisible] = useState(false);
-  const [isPhoneNumberModalVisible, setIsPhoneNumberModalVisible] = useState(false);
+  const [image, setImage] = useState(require('../assets/sunset.jpg')); 
+  const defaultImage = require('../assets/sunset.jpg');
 
   const updateCallerInfo = (updates) => {
     onCustomize({ ...callerInfo, ...updates });
@@ -23,9 +22,16 @@ export default function CustomizeCall({ onCustomize, onBack, callerInfo }) {
   
   // Use a useEffect to update the local state whenever callerInfo changes.
   React.useEffect(() => {
-    setName(callerInfo.name);
-    setPhoneNumber(callerInfo.phoneNumber);
-    setImage(callerInfo.image.uri);
+    setName(callerInfo.name || 'Unknown');
+    setPhoneNumber(callerInfo.phoneNumber || '');
+
+    // Only set the image URI if callerInfo.image is defined and has a uri property
+    if (callerInfo.image && callerInfo.image.uri) {
+      setImage(callerInfo.image.uri);
+    } else {
+      // Fallback to the default image
+      setImage(defaultImage);
+    }
   }, [callerInfo]);
 
   const revertToDefault = () => {
@@ -36,7 +42,7 @@ export default function CustomizeCall({ onCustomize, onBack, callerInfo }) {
     // Update the state variables
     setName(defaultName);
     setPhoneNumber(defaultPhoneNumber);
-    setImage(defaultImageUri); // Set the default image uri directly
+    setImage(defaultImage); // Set the default image uri directly
     
     // Update the callerInfo object that is being passed down as props
     updateCallerInfo({
@@ -71,9 +77,9 @@ export default function CustomizeCall({ onCustomize, onBack, callerInfo }) {
       )}
 
       <EditableImage
-        imageUri={callerInfo.image.uri}
+        imageUri={image}
         onImageSelected={handleImageSelected}
-        style={commonStyles.image} // You may need to create this style if it doesn't exist
+        style={commonStyles.image}
       />
 
       {/* Editable Text Input for Caller's Name */}
