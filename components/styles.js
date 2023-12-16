@@ -11,17 +11,21 @@ export const commonStyles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "black",
-    display: "flex",
+    // display: "flex"
+  },
+  contentContainer: {
+    flex: 1,
+    marginTop: 30,
+    alignItems: 'center', // This will align items horizontally in the center
+    paddingHorizontal: 20, // Add some padding if needed
   },
   button: {
     margin: 10,
-    alignContent: "center",
     padding: 10,
     borderWidth: 2,
     borderRadius: 10,
-    alignSelf: "stretch",
     backgroundColor: "red",
-    width: '80%'
+    width: '100%', // Make the button fill the width of its container
   },
   buttonText: {
     fontSize: 30,

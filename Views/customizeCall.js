@@ -76,6 +76,8 @@ export default function CustomizeCall({ onCustomize, onBack, callerInfo }) {
     <View style={commonStyles.container}>
       <Header />
 
+      <View style={commonStyles.contentContainer}>
+
       {image.uri && (
         <Image source={{ uri: image.uri }} style={commonStyles.image} />
       )}
@@ -108,6 +110,7 @@ export default function CustomizeCall({ onCustomize, onBack, callerInfo }) {
       <TouchableOpacity style={commonStyles.button} onPress={revertToDefault}>
         <Text style={commonStyles.buttonText}>Revert to Default</Text>
       </TouchableOpacity>
+    </View>
 
       <View style={commonStyles.footer}>
         <BackButton onPress={onBack} />
