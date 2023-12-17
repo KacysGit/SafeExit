@@ -2,16 +2,23 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // If you're using Expo or ensure you have the equivalent in your project
 import RotatedHangUpIcon from '../components/RotatedHangupIcon';
+import { Vibration } from 'react-native';
 
 const FakeCallScreen = ({ callerInfo, onHangUp, onAccept }) => {
   const [currentTime, setCurrentTime] = useState('');
 
   useEffect(() => {
+    // Start vibrating when the component mounts
+    Vibration.vibrate([500, 1000, 500]);
+
     const interval = setInterval(() => {
       setCurrentTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
     }, 1000);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      Vibration.cancel(); // Stop vibrating when the component unmounts
+    };
   }, []);
 
   return (
