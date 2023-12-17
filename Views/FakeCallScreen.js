@@ -8,8 +8,15 @@ const FakeCallScreen = ({ callerInfo, onHangUp, onAccept }) => {
   const [currentTime, setCurrentTime] = useState('');
 
   useEffect(() => {
-    // Start vibrating when the component mounts
-    Vibration.vibrate([500, 1000, 500]);
+    // Define a vibration pattern
+    const vibrationPattern = [500, 1000]; // Vibrate for 500ms, then off for 1000ms
+
+    // Start vibrating in a loop
+    const startContinuousVibration = () => {
+      Vibration.vibrate(vibrationPattern, true); // Pass `true` to enable continuous vibration
+    };
+
+    startContinuousVibration();
 
     const interval = setInterval(() => {
       setCurrentTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
@@ -17,7 +24,7 @@ const FakeCallScreen = ({ callerInfo, onHangUp, onAccept }) => {
 
     return () => {
       clearInterval(interval);
-      Vibration.cancel(); // Stop vibrating when the component unmounts
+      Vibration.cancel(); // Make sure to stop the vibration when the component unmounts
     };
   }, []);
 
