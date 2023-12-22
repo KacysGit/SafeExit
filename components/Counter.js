@@ -6,19 +6,18 @@ const Counter = ({ initialDelay, onCountdownComplete, startCountdown }) => {
     const [countdown, setCountdown] = useState(initialDelay);
   
     useEffect(() => {
-      if (!startCountdown) return; // Only start countdown if `startCountdown` is true
-  
-      if (countdown === 0) {
-        onCountdownComplete();
-        return;
-      }
-  
-      const timer = setTimeout(() => {
-        setCountdown(countdown - 1);
-      }, 1000);
-  
-      return () => clearTimeout(timer);
-    }, [countdown, onCountdownComplete, startCountdown]); // Add `startCountdown` to dependency array
+        if (!startCountdown || countdown <= 0) return; // Exit if countdown shouldn't start or is already completed
+      
+        const timer = setTimeout(() => {
+          if (countdown === 1) {
+            onCountdownComplete();
+          }
+          setCountdown(prevCountdown => prevCountdown - 1);
+        }, 1000);
+      
+        return () => clearTimeout(timer);
+      }, [countdown, startCountdown, onCountdownComplete]);
+      
   
     return (
       <View style={styles.container}>
@@ -31,10 +30,10 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 10,
+    padding: 150,
   },
   text: {
-    fontSize: 40,
+    fontSize: 70,
     color: 'white',
   },
 });

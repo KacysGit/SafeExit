@@ -36,8 +36,10 @@ export default function App() {
 
   const handleCountdownComplete = () => {
     setShowFakeCall(true);
-    setStartCountdown(false); // Reset countdown start state after it completes
+    setStartCountdown(false); // Resetting the countdown state
+    //setCountdown(delay); // Resetting the countdown number if necessary
   };
+  
 
   const updateCallerInfo = (newInfo) => {
     setCallerInfo(prevInfo => ({
@@ -47,9 +49,6 @@ export default function App() {
   };
 
   const handleFakeCallTrigger = () => {
-    setTimeout(() => {
-      setShowFakeCall(true);
-    }, delay * 1000); // Ensure this uses the 'delay' state from useAppState
     setStartCountdown(true);
   };
 
