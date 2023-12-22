@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import useAppState from './hooks/useAppState'; // Custom hook for managing app state
 
@@ -6,6 +6,7 @@ import CustomizeCall from './Views/customizeCall';
 import FakeCallScreen from './Views/FakeCallScreen';
 import AnswerCallScreen from './Views/AnswerCallScreen';
 import Header from './components/header';
+import Counter from './components/Counter';
 
 
 export default function App() {
@@ -25,10 +26,17 @@ export default function App() {
     setCallDelay, // Ensure this is correctly destructured from useAppState
   } = useAppState();
 
+  const [startCountdown, setStartCountdown] = useState(false);
+
   const resetToHomeScreen = () => {
     setShowFakeCall(false);
     setShowAnswerCall(false);
     setShowCustomizeCall(false);
+  };
+
+  const handleCountdownComplete = () => {
+    setShowFakeCall(true);
+    setStartCountdown(false); // Reset countdown start state after it completes
   };
 
   const updateCallerInfo = (newInfo) => {
@@ -42,6 +50,7 @@ export default function App() {
     setTimeout(() => {
       setShowFakeCall(true);
     }, delay * 1000); // Ensure this uses the 'delay' state from useAppState
+    setStartCountdown(true);
   };
 
   return (
@@ -70,6 +79,14 @@ export default function App() {
               <Text style={styles.buttonText}>Call</Text>
             </TouchableOpacity>
           </View>
+
+          {delay > 0 && (
+            <Counter
+            initialDelay={delay}
+            onCountdownComplete={handleCountdownComplete}
+            startCountdown={startCountdown}
+          />
+          )}
         </>
       )}
     </View>
