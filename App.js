@@ -1,43 +1,75 @@
-import React from "react";
-import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
-import CustomizeCall from "./components/customizeCall";
-import Header from "./components/header";
+import React from 'react';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import useAppState from './hooks/useAppState'; // Custom hook for managing app state
+
+import CustomizeCall from './Views/customizeCall';
 import FakeCallScreen from './Views/FakeCallScreen';
-import AnswerCallScreen from './Views/AnswerCallScreen'; // Make sure this path is correct
+import AnswerCallScreen from './Views/AnswerCallScreen';
+import Header from './components/header';
+
 
 export default function App() {
-  const [showFakeCall, setShowFakeCall] = React.useState(false);
-  const [showAnswerCall, setShowAnswerCall] = React.useState(false);
+  const {
+    showFakeCall,
+    setShowFakeCall,
+    showAnswerCall,
+    setShowAnswerCall,
+    showCustomizeCall,
+    setShowCustomizeCall,
+    callerInfo,
+    setCallerInfo,
+    toggleFakeCall,
+    toggleAnswerCall,
+    toggleCustomizeCall,
+    delay, // Retrieve delay from useAppState
+    setCallDelay, // Ensure this is correctly destructured from useAppState
+  } = useAppState();
 
-  // Define a function to handle the call accept action
-  const handleAcceptCall = (caller) => {
-    setShowFakeCall(false); // Hide the fake call screen
-    setShowAnswerCall(true); // Show the answer call screen
-    // You can pass the caller name to the AnswerCallScreen if needed
+  const resetToHomeScreen = () => {
+    setShowFakeCall(false);
+    setShowAnswerCall(false);
+    setShowCustomizeCall(false);
+  };
+
+  const updateCallerInfo = (newInfo) => {
+    setCallerInfo(prevInfo => ({
+      ...prevInfo,
+      ...newInfo,
+    }));
+  };
+
+  const handleFakeCallTrigger = () => {
+    setTimeout(() => {
+      setShowFakeCall(true);
+    }, delay * 1000); // Ensure this uses the 'delay' state from useAppState
   };
 
   return (
     <View style={styles.container}>
-      {showFakeCall ? (
-        <FakeCallScreen
-          onHangUp={() => setShowFakeCall(false)}
-          onAccept={handleAcceptCall} // Pass the new function to handle accept
+      {showCustomizeCall ? (
+        <CustomizeCall
+          onCustomize={setCallerInfo}
+          onBack={() => toggleCustomizeCall(false)}
+          callerInfo={callerInfo}
+          setCallDelay={setCallDelay}
+          currentDelay={delay} // Pass the current delay to CustomizeCall
         />
+      
       ) : showAnswerCall ? (
-        <AnswerCallScreen
-          callerName="Caller" // Pass the caller name
-          onHangUp={() => setShowAnswerCall(false)} // Function to handle hang up from answer call screen
-        />
+        <AnswerCallScreen callerInfo={callerInfo} onHangUp={resetToHomeScreen} />
+      ) : showFakeCall ? (
+        <FakeCallScreen callerInfo={callerInfo} onHangUp={() => toggleFakeCall(false)} onAccept={() => toggleAnswerCall(true)} />
       ) : (
         <>
           <Header />
-          <CustomizeCall />
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => setShowFakeCall(true)}
-          >
-            <Text style={styles.buttonText}>Call Me</Text>
-          </TouchableOpacity>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity style={styles.button} onPress={() => toggleCustomizeCall(true)}>
+              <Text style={styles.buttonText}>Customize Call</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.button} onPress={handleFakeCallTrigger}>
+              <Text style={styles.buttonText}>Call</Text>
+            </TouchableOpacity>
+          </View>
         </>
       )}
     </View>
@@ -50,13 +82,17 @@ const styles = StyleSheet.create({
     backgroundColor: "black",
     display: "flex",
   },
+  buttonContainer: {
+    alignItems: 'center', // This will horizontally center your buttons within this container
+    marginTop: 20
+  },
   button: {
-    margin: 10,
+    marginVertical: 10, // Vertical margin for spacing between buttons
     padding: 10,
     borderWidth: 2,
     borderRadius: 10,
-    alignSelf: "stretch",
     backgroundColor: "red",
+    width: '80%', // Set a specific width for the buttons
   },
   buttonText: {
     fontSize: 30,

@@ -2,28 +2,39 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // If you're using Expo or ensure you have the equivalent in your project
 import RotatedHangUpIcon from '../components/RotatedHangupIcon';
+import { Vibration } from 'react-native';
 
-const FakeCallScreen = ({ onHangUp, onAccept }) => {
+const FakeCallScreen = ({ callerInfo, onHangUp, onAccept }) => {
   const [currentTime, setCurrentTime] = useState('');
 
   useEffect(() => {
+    // Define a vibration pattern
+    const vibrationPattern = [500, 1000]; // Vibrate for 500ms, then off for 1000ms
+
+    // Start vibrating in a loop
+    const startContinuousVibration = () => {
+      Vibration.vibrate(vibrationPattern, true); // Pass `true` to enable continuous vibration
+    };
+
+    startContinuousVibration();
+
     const interval = setInterval(() => {
       setCurrentTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
     }, 1000);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      Vibration.cancel(); // Make sure to stop the vibration when the component unmounts
+    };
   }, []);
 
   return (
     <View style={styles.fullScreen}>
       <View style={styles.topContainer}>
-        <Image
-          source={require('.././assets/sunset.jpg')} // Replace with your caller image path
-          style={styles.callerImage}
-        />
-        <Text style={styles.smollNotice}> Incoming call</Text>
-        <Text style={styles.callerName}>Unknown</Text>
-        <Text style={styles.smollNotice}> Mobile +1 214-519-7328</Text>
+        <Image source={callerInfo.image} style={styles.callerImage} />
+        <Text style={styles.smollNotice}>Incoming call</Text>
+        <Text style={styles.callerName}>{callerInfo.name}</Text>
+        <Text style={styles.smollNotice}>Mobile {callerInfo.phoneNumber}</Text>
       </View>
       <View style={styles.middleContainer}>
         <Text style={styles.time}>{currentTime}</Text>
