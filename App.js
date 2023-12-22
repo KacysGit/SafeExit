@@ -37,9 +37,9 @@ export default function App() {
 
   const handleCountdownComplete = () => {
     setShowFakeCall(true);
-    setStartCountdown(false); // Resetting the countdown state
-    //setCountdown(delay); // Resetting the countdown number if necessary
+    setStartCountdown(false); // Ensure this is set to false when the countdown completes
   };
+  
 
 
   const handleFakeCallTrigger = () => {
@@ -91,9 +91,9 @@ export default function App() {
         </>
       )}
 
-      {(startCountdown || showFakeCall) && (
-        <CancelButton setShowFakeCall={setShowFakeCall} setStartCountdown={setStartCountdown} />
-      )} 
+    {(startCountdown && !showFakeCall) && (
+      <CancelButton setShowFakeCall={setShowFakeCall} setStartCountdown={setStartCountdown} />
+    )}
     </View>
   );
 }
