@@ -15,9 +15,8 @@ const useAppState = () => {
   const toggleFakeCall = (value) => setShowFakeCall(value);
   const toggleAnswerCall = (value) => setShowAnswerCall(value);
   const toggleCustomizeCall = (value) => setShowCustomizeCall(value);
+  const [startCountdown, setStartCountdown] = useState(false);
   const [delay, setDelay] = useState(0);
-
-  // Add a function to update the delay
   const setCallDelay = (value) => setDelay(value);
   
   return {
@@ -34,6 +33,8 @@ const useAppState = () => {
     toggleCustomizeCall,
     delay,
     setCallDelay,
+    startCountdown,
+    setStartCountdown,
   };
 };
 

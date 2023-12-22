@@ -7,6 +7,7 @@ import FakeCallScreen from './Views/FakeCallScreen';
 import AnswerCallScreen from './Views/AnswerCallScreen';
 import Header from './components/header';
 import Counter from './components/Counter';
+import CancelButton from './components/CancelButton'; // cancels the call after it's been triggered
 
 
 export default function App() {
@@ -22,11 +23,11 @@ export default function App() {
     toggleFakeCall,
     toggleAnswerCall,
     toggleCustomizeCall,
-    delay, // Retrieve delay from useAppState
-    setCallDelay, // Ensure this is correctly destructured from useAppState
+    delay,
+    setCallDelay,
+    startCountdown,
+    setStartCountdown, // Use this from useAppState
   } = useAppState();
-
-  const [startCountdown, setStartCountdown] = useState(false);
 
   const resetToHomeScreen = () => {
     setShowFakeCall(false);
@@ -39,14 +40,7 @@ export default function App() {
     setStartCountdown(false); // Resetting the countdown state
     //setCountdown(delay); // Resetting the countdown number if necessary
   };
-  
 
-  const updateCallerInfo = (newInfo) => {
-    setCallerInfo(prevInfo => ({
-      ...prevInfo,
-      ...newInfo,
-    }));
-  };
 
   const handleFakeCallTrigger = () => {
     if (delay === 0) {
@@ -84,6 +78,7 @@ export default function App() {
             <TouchableOpacity style={styles.button} onPress={handleFakeCallTrigger}>
               <Text style={styles.buttonText}>Call</Text>
             </TouchableOpacity>
+            
           </View>
 
           {delay > 0 && (
@@ -95,6 +90,10 @@ export default function App() {
           )}
         </>
       )}
+
+      {(startCountdown || showFakeCall) && (
+        <CancelButton setShowFakeCall={setShowFakeCall} setStartCountdown={setStartCountdown} />
+      )} 
     </View>
   );
 }
