@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, TextInput, Text, TouchableOpacity, Image, Modal, StyleSheet } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, ScrollView, Text, TouchableOpacity, Image, Modal, StyleSheet } from "react-native";
 import BackButton from "../components/backButton";
 import Header from "../components/header";
 import { pickImage } from '../components/imageUpload';
@@ -7,8 +7,9 @@ import { commonStyles } from '../components/styles'; // Make sure the path is co
 import EditableTextInput from "../components/EditableTextInput";
 import EditNumberInput from "../components/EditNumberInput";
 import EditableImage from "../components/EditableImage";
+import SetCounter from '../components/SetCounter'; // Adjust path as necessary
 
-export default function CustomizeCall({ onCustomize, onBack, callerInfo }) {
+export default function CustomizeCall({ onCustomize, onBack, callerInfo, setCallDelay, currentDelay }) {
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [image, setImage] = useState(require('../assets/sunset.jpg')); 
@@ -18,7 +19,9 @@ export default function CustomizeCall({ onCustomize, onBack, callerInfo }) {
     onCustomize({ ...callerInfo, ...updates });
   };
 
-
+  const handleSaveDelay = (delayInSeconds) => {
+    setCallDelay(delayInSeconds); // Update the delay state directly
+  };
   
   // Use a useEffect to update the local state whenever callerInfo changes.
   React.useEffect(() => {
@@ -32,7 +35,7 @@ export default function CustomizeCall({ onCustomize, onBack, callerInfo }) {
       // Fallback to the default image
       setImage(defaultImage);
     }
-  }, [callerInfo]);
+  }, [callerInfo, currentDelay]);
 
   const revertToDefault = () => {
     const defaultName = 'Unknown';
@@ -71,54 +74,49 @@ export default function CustomizeCall({ onCustomize, onBack, callerInfo }) {
     }
   };
   
-
-  return (
+return (
     <View style={commonStyles.container}>
       <Header />
 
-      <View style={commonStyles.contentContainer}>
+      <ScrollView style={commonStyles.scrollContainer}>
+        {/* All your existing inputs and buttons go here */}
 
-      {image.uri && (
-        <Image source={{ uri: image.uri }} style={commonStyles.image} />
-      )}
+        {/* Editable Image */}
+        <EditableImage
+          imageUri={image}
+          onImageSelected={handleImageSelected}
+          style={commonStyles.image}
+        />
 
-      <EditableImage
-        imageUri={image} // Pass the entire image object directly
-        onImageSelected={handleImageSelected}
-        style={commonStyles.image}
-      />
+        {/* Editable Text Inputs */}
+        <EditableTextInput
+          value={callerInfo.name}
+          onSave={handleSaveName}
+          placeholder="Enter Caller's Name"
+          style={commonStyles.input}
+        />
+        <EditNumberInput
+          value={callerInfo.phoneNumber}
+          onSave={handleSavePhoneNumber}
+          placeholder="Enter Caller's Number"
+          keyboardType="phone-pad"
+          style={commonStyles.input}
+          isPhoneNumber={true}
+        />
 
-      {/* Editable Text Input for Caller's Name */}
-      <EditableTextInput
-        value={callerInfo.name}
-        onSave={handleSaveName}
-        placeholder="Enter Caller's Name"
-        style={commonStyles.input}
-      />
-      
-      {/* Editable Text Input for Caller's Phone Number */}
-      <EditNumberInput
-        value={callerInfo.phoneNumber}
-        onSave={handleSavePhoneNumber}
-        placeholder="Enter Caller's Number"
-        keyboardType="phone-pad"
-        style={commonStyles.input}
-        isPhoneNumber={true}
-      />
+        {/* Set Counter */}
+        <SetCounter onSaveDelay={handleSaveDelay} currentDelay={currentDelay} />
 
-
-      <TouchableOpacity style={commonStyles.button} onPress={revertToDefault}>
-        <Text style={commonStyles.buttonText}>Revert to Default</Text>
-      </TouchableOpacity>
-    </View>
+        {/* Revert to Default Button */}
+        <TouchableOpacity style={commonStyles.button} onPress={revertToDefault}>
+          <Text style={commonStyles.buttonText}>Revert to Default</Text>
+        </TouchableOpacity>
+      </ScrollView>
 
       <View style={commonStyles.footer}>
         <BackButton onPress={onBack} />
       </View>
-
-      
     </View>
   );
 }
-
 

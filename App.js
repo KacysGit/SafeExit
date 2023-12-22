@@ -7,19 +7,22 @@ import FakeCallScreen from './Views/FakeCallScreen';
 import AnswerCallScreen from './Views/AnswerCallScreen';
 import Header from './components/header';
 
+
 export default function App() {
   const {
     showFakeCall,
-    setShowFakeCall, // Destructure this setter
+    setShowFakeCall,
     showAnswerCall,
-    setShowAnswerCall, // Destructure this setter
+    setShowAnswerCall,
     showCustomizeCall,
-    setShowCustomizeCall, // Destructure this setter
+    setShowCustomizeCall,
     callerInfo,
     setCallerInfo,
     toggleFakeCall,
     toggleAnswerCall,
     toggleCustomizeCall,
+    delay, // Retrieve delay from useAppState
+    setCallDelay, // Ensure this is correctly destructured from useAppState
   } = useAppState();
 
   const resetToHomeScreen = () => {
@@ -31,19 +34,27 @@ export default function App() {
   const updateCallerInfo = (newInfo) => {
     setCallerInfo(prevInfo => ({
       ...prevInfo,
-      ...newInfo, // This will update the callerInfo with newInfo
+      ...newInfo,
     }));
   };
 
+  const handleFakeCallTrigger = () => {
+    setTimeout(() => {
+      setShowFakeCall(true);
+    }, delay * 1000); // Ensure this uses the 'delay' state from useAppState
+  };
 
   return (
     <View style={styles.container}>
       {showCustomizeCall ? (
         <CustomizeCall
-        onCustomize={setCallerInfo}
-        onBack={() => toggleCustomizeCall(false)}
-        callerInfo={callerInfo} // Pass callerInfo as a prop
-      />
+          onCustomize={setCallerInfo}
+          onBack={() => toggleCustomizeCall(false)}
+          callerInfo={callerInfo}
+          setCallDelay={setCallDelay}
+          currentDelay={delay} // Pass the current delay to CustomizeCall
+        />
+      
       ) : showAnswerCall ? (
         <AnswerCallScreen callerInfo={callerInfo} onHangUp={resetToHomeScreen} />
       ) : showFakeCall ? (
@@ -55,7 +66,7 @@ export default function App() {
             <TouchableOpacity style={styles.button} onPress={() => toggleCustomizeCall(true)}>
               <Text style={styles.buttonText}>Customize Call</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => toggleFakeCall(true)}>
+            <TouchableOpacity style={styles.button} onPress={handleFakeCallTrigger}>
               <Text style={styles.buttonText}>Call</Text>
             </TouchableOpacity>
           </View>

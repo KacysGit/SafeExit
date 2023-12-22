@@ -19,6 +19,12 @@ export const commonStyles = StyleSheet.create({
     alignItems: 'center', // This will align items horizontally in the center
     paddingHorizontal: 20, // Add some padding if needed
   },
+  scrollContainer: {
+    flex: 1,
+    marginTop: 30,
+    alignContent: 'center', // This will align items horizontally in the center
+    paddingHorizontal: 20, // Add some padding if needed
+  },
   button: {
     margin: 10,
     padding: 10,
