@@ -27,6 +27,8 @@ export default function App() {
     setCallDelay,
     startCountdown,
     setStartCountdown, // Use this from useAppState
+    initialDelay,
+    setInitialDelay,
   } = useAppState();
 
   const resetToHomeScreen = () => {
@@ -91,8 +93,14 @@ export default function App() {
         </>
       )}
 
-    {(startCountdown && !showFakeCall) && (
-      <CancelButton setShowFakeCall={setShowFakeCall} setStartCountdown={setStartCountdown} />
+    {/* Cancel Incoming Call from Triggering when there's a timed delay */}
+    {(startCountdown || showFakeCall) && (
+      <CancelButton
+      setShowFakeCall={setShowFakeCall}
+      setStartCountdown={setStartCountdown}
+      setInitialDelay={setInitialDelay}
+      initialDelay={initialDelay}
+    />
     )}
     </View>
   );

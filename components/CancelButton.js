@@ -1,20 +1,21 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 
-const CancelButton = ({ setShowFakeCall, setStartCountdown }) => {
-  const handleCancelCall = () => {
-    // Resetting relevant states to stop the call process
-    setShowFakeCall(false);
-    setStartCountdown(false);
-    // Add any other state resets if needed
+  // components/CancelButton.js
+  const CancelButton = ({ setShowFakeCall, setStartCountdown, setInitialDelay, initialDelay }) => {
+    const handleCancelCall = () => {
+      setShowFakeCall(false);
+      setStartCountdown(false);
+      setInitialDelay(initialDelay); // Reset the countdown to the initial delay
+    };
+  
+    return (
+      <TouchableOpacity style={styles.button} onPress={handleCancelCall}>
+        <Text style={styles.buttonText}>Cancel Call</Text>
+      </TouchableOpacity>
+    );
   };
-
-  return (
-    <TouchableOpacity style={styles.button} onPress={handleCancelCall}>
-      <Text style={styles.buttonText}>Cancel Call</Text>
-    </TouchableOpacity>
-  );
-};
+  
 
 const styles = StyleSheet.create({
   button: {
