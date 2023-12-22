@@ -49,8 +49,15 @@ export default function App() {
   };
 
   const handleFakeCallTrigger = () => {
-    setStartCountdown(true);
+    if (delay === 0) {
+      // If delay is zero, trigger the call immediately
+      setShowFakeCall(true);
+    } else {
+      // Otherwise, start the countdown
+      setStartCountdown(true);
+    }
   };
+  
 
   return (
     <View style={styles.container}>
