@@ -35,10 +35,10 @@ const SetCounter = ({ onSaveDelay, currentDelay }) => {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    marginVertical: 10,
+    marginVertical: 15,
   },
   label: {
-    fontSize: 16,
+    fontSize: 19,
     marginBottom: 10,
     color: 'white'
   },
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     borderColor: 'grey',
     borderRadius: 5,
     padding: 10,
-    width: '80%',
+    //width: '80%',
     marginBottom: 10,
     color: 'black',
     backgroundColor: 'white'
@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: 'white',
+    fontSize: 20
   },
 });
 
