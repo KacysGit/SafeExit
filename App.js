@@ -94,13 +94,13 @@ export default function App() {
       )}
 
     {/* Cancel Incoming Call from Triggering when there's a timed delay */}
-    {(startCountdown || showFakeCall) && (
+    {startCountdown && !showFakeCall && (
       <CancelButton
-      setShowFakeCall={setShowFakeCall}
-      setStartCountdown={setStartCountdown}
-      setInitialDelay={setInitialDelay}
-      initialDelay={initialDelay}
-    />
+        setShowFakeCall={setShowFakeCall}
+        setStartCountdown={setStartCountdown}
+        setInitialDelay={setInitialDelay}
+        initialDelay={initialDelay}
+      />
     )}
     </View>
   );
