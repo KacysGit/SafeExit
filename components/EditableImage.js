@@ -1,6 +1,6 @@
 // EditableImage.js
 import React from 'react';
-import { View, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { pickImage } from '../components/imageUpload'; // Assuming this is your image picking function
 

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { View, ScrollView, Text, TouchableOpacity, Image, Modal, StyleSheet } from "react-native";
 import BackButton from "../components/backButton";
 import Header from "../components/header";
-import { pickImage } from '../components/imageUpload';
 import { commonStyles } from '../components/styles'; // Make sure the path is correct
 import EditableTextInput from "../components/EditableTextInput";
 import EditNumberInput from "../components/EditNumberInput";
@@ -52,6 +51,9 @@ export default function CustomizeCall({ onCustomize, onBack, callerInfo, setCall
       phoneNumber: defaultPhoneNumber,
       image: defaultImage, // Pass the result of require directly
     });
+  
+    // Reset the delay to zero seconds
+    setCallDelay(0);
   };
   
   
