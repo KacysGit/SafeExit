@@ -59,12 +59,16 @@ export default function App() {
     <View style={styles.container}>
       {showCustomizeCall ? (
         <CustomizeCall
-          onCustomize={setCallerInfo}
-          onBack={() => toggleCustomizeCall(false)}
-          callerInfo={callerInfo}
-          setCallDelay={setCallDelay}
-          currentDelay={delay} // Pass the current delay to CustomizeCall
-        />
+        onCustomize={setCallerInfo}
+        onBack={() => toggleCustomizeCall(false)}
+        callerInfo={callerInfo}
+        setCallDelay={setCallDelay}
+        currentDelay={delay}
+        resetCountdown={() => {
+          setStartCountdown(false);
+          setInitialDelay(0);
+        }}
+      />
       
       ) : showAnswerCall ? (
         <AnswerCallScreen callerInfo={callerInfo} onHangUp={resetToHomeScreen} />
@@ -80,31 +84,33 @@ export default function App() {
             <TouchableOpacity style={styles.button} onPress={handleFakeCallTrigger}>
               <Text style={styles.buttonText}>Call</Text>
             </TouchableOpacity>
-            
           </View>
 
           {delay > 0 && (
             <Counter
-            initialDelay={delay}
-            onCountdownComplete={handleCountdownComplete}
-            startCountdown={startCountdown}
-          />
+              initialDelay={delay}
+              onCountdownComplete={handleCountdownComplete}
+              startCountdown={startCountdown}
+            />
           )}
         </>
       )}
 
-    {/* Cancel Incoming Call from Triggering when there's a timed delay */}
-    {startCountdown && !showFakeCall && (
-      <CancelButton
-        setShowFakeCall={setShowFakeCall}
-        setStartCountdown={setStartCountdown}
-        setInitialDelay={setInitialDelay}
-        initialDelay={initialDelay}
-      />
-    )}
+      {/* Only show CancelButton on the main screen and when a call is being delayed */}
+      {startCountdown && !showFakeCall && !showCustomizeCall && (
+        <CancelButton
+          setShowFakeCall={setShowFakeCall}
+          setStartCountdown={setStartCountdown}
+          setInitialDelay={setInitialDelay}
+          initialDelay={initialDelay}
+        />
+      )}
     </View>
   );
+
 }
+
+
 
 const styles = StyleSheet.create({
   container: {
