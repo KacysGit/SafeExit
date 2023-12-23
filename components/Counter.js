@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         justifyContent: 'center',
-        padding: 150,
+        marginTop: 150,
     },
     text: {
         fontSize: 70,
