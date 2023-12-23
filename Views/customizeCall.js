@@ -8,7 +8,7 @@ import EditNumberInput from "../components/EditNumberInput";
 import EditableImage from "../components/EditableImage";
 import SetCounter from '../components/SetCounter'; // Adjust path as necessary
 
-export default function CustomizeCall({ onCustomize, onBack, callerInfo, setCallDelay, currentDelay }) {
+export default function CustomizeCall({ onCustomize, onBack, callerInfo, setCallDelay, currentDelay,resetCountdown }) {
   const [name, setName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [image, setImage] = useState(require('../assets/sunset.jpg')); 
@@ -54,7 +54,11 @@ export default function CustomizeCall({ onCustomize, onBack, callerInfo, setCall
   
     // Reset the delay to zero seconds
     setCallDelay(0);
+  
+    // Reset the countdown using the passed function
+    resetCountdown();
   };
+  
   
   
 
