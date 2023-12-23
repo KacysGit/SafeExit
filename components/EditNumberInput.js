@@ -2,30 +2,48 @@ import React, { useState, useEffect } from 'react';
 import { View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-const EditNumberInput = ({ value, onSave, placeholder, keyboardType = 'default', style, formatPattern, isPhoneNumber }) => {
+const EditNumberInput = ({ value, onSave, placeholder, keyboardType = 'default', style, isPhoneNumber }) => {
   const [editable, setEditable] = useState(false);
   const [localValue, setLocalValue] = useState(value);
 
   useEffect(() => {
-    // Update localValue whenever the value prop changes
     setLocalValue(value);
   }, [value]);
 
+  const completePhoneNumberIfNeeded = (text) => {
+    let digits = text.replace(/[^\d]/g, '');
+    while (digits.length < 10) {
+      digits += Math.floor(Math.random() * 10).toString();
+    }
+    return digits.replace(/^(\d{1,3})(\d{1,3})?(\d{1,4})?/, (match, g1, g2, g3) => {
+      if (g3) {
+        return `(${g1}) ${g2}-${g3}`;
+      } else if (g2) {
+        return `(${g1}) ${g2}`;
+      } else {
+        return `(${g1}`;
+      }
+    });
+  };
+
   const handleSave = () => {
-    onSave(localValue);
+    if (isPhoneNumber && localValue.replace(/[^\d]/g, '').length < 10) {
+      const completedNumber = completePhoneNumberIfNeeded(localValue);
+      setLocalValue(completedNumber);
+      onSave(completedNumber);
+    } else {
+      onSave(localValue);
+    }
     setEditable(false);
   };
 
   const handleTextChange = (text) => {
     let formattedText = text;
     if (isPhoneNumber) {
-      // Strip all non-numeric characters
       formattedText = text.replace(/[^\d]/g, '');
-
-      // Apply the pattern # (###) ###-####
       if (formattedText.length > 0) {
-        formattedText = formattedText.substring(0, 10); // enforce max length
-        formattedText = formattedText.replace(/^(\d{1,3})(\d{1,3})?(\d{1,4})?/, function(match, g1, g2, g3) {
+        formattedText = formattedText.substring(0, 10);
+        formattedText = formattedText.replace(/^(\d{1,3})(\d{1,3})?(\d{1,4})?/, (match, g1, g2, g3) => {
           if (g3) {
             return `(${g1}) ${g2}-${g3}`;
           } else if (g2) {
@@ -37,6 +55,7 @@ const EditNumberInput = ({ value, onSave, placeholder, keyboardType = 'default',
       }
     }
     setLocalValue(formattedText);
+    onSave(formattedText); // Save changes immediately
   };
 
   return (
@@ -46,14 +65,14 @@ const EditNumberInput = ({ value, onSave, placeholder, keyboardType = 'default',
         value={localValue}
         placeholder={placeholder}
         keyboardType={keyboardType}
-        onBlur={handleSave} // Save on losing focus
-        onFocus={() => setEditable(true)} // Set edit mode when focused
-        style={[styles.textInput, { color: editable ? 'black' : 'grey' }]} // Style and color based on the editable state
+        onBlur={handleSave} // Save and potentially autofill on losing focus
+        onFocus={() => setEditable(true)}
+        style={[styles.textInput, { color: editable ? 'black' : 'grey' }]}
       />
       <Ionicons
         name="pencil"
         size={24}
-        color={editable ? 'black' : 'grey'} // Icon color changes based on the editable state
+        color={editable ? 'black' : 'grey'}
       />
     </View>
   );
@@ -75,4 +94,3 @@ const styles = StyleSheet.create({
 });
 
 export default EditNumberInput;
-
