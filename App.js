@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import useAppState from './hooks/useAppState'; // Custom hook for managing app state
 
@@ -6,6 +6,8 @@ import CustomizeCall from './Views/customizeCall';
 import FakeCallScreen from './Views/FakeCallScreen';
 import AnswerCallScreen from './Views/AnswerCallScreen';
 import Header from './components/header';
+import Counter from './components/Counter';
+import CancelButton from './components/CancelButton'; // cancels the call after it's been triggered
 
 
 export default function App() {
@@ -21,8 +23,12 @@ export default function App() {
     toggleFakeCall,
     toggleAnswerCall,
     toggleCustomizeCall,
-    delay, // Retrieve delay from useAppState
-    setCallDelay, // Ensure this is correctly destructured from useAppState
+    delay,
+    setCallDelay,
+    startCountdown,
+    setStartCountdown, // Use this from useAppState
+    initialDelay,
+    setInitialDelay,
   } = useAppState();
 
   const resetToHomeScreen = () => {
@@ -31,18 +37,23 @@ export default function App() {
     setShowCustomizeCall(false);
   };
 
-  const updateCallerInfo = (newInfo) => {
-    setCallerInfo(prevInfo => ({
-      ...prevInfo,
-      ...newInfo,
-    }));
+  const handleCountdownComplete = () => {
+    setShowFakeCall(true);
+    setStartCountdown(false); // Ensure this is set to false when the countdown completes
   };
+  
+
 
   const handleFakeCallTrigger = () => {
-    setTimeout(() => {
+    if (delay === 0) {
+      // If delay is zero, trigger the call immediately
       setShowFakeCall(true);
-    }, delay * 1000); // Ensure this uses the 'delay' state from useAppState
+    } else {
+      // Otherwise, start the countdown
+      setStartCountdown(true);
+    }
   };
+  
 
   return (
     <View style={styles.container}>
@@ -69,9 +80,28 @@ export default function App() {
             <TouchableOpacity style={styles.button} onPress={handleFakeCallTrigger}>
               <Text style={styles.buttonText}>Call</Text>
             </TouchableOpacity>
+            
           </View>
+
+          {delay > 0 && (
+            <Counter
+            initialDelay={delay}
+            onCountdownComplete={handleCountdownComplete}
+            startCountdown={startCountdown}
+          />
+          )}
         </>
       )}
+
+    {/* Cancel Incoming Call from Triggering when there's a timed delay */}
+    {startCountdown && !showFakeCall && (
+      <CancelButton
+        setShowFakeCall={setShowFakeCall}
+        setStartCountdown={setStartCountdown}
+        setInitialDelay={setInitialDelay}
+        initialDelay={initialDelay}
+      />
+    )}
     </View>
   );
 }
