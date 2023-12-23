@@ -5,10 +5,19 @@ import { Ionicons } from '@expo/vector-icons';
 const EditNumberInput = ({ value, onSave, placeholder, keyboardType = 'default', style, isPhoneNumber }) => {
   const [editable, setEditable] = useState(false);
   const [localValue, setLocalValue] = useState(value);
+  const [isFocused, setIsFocused] = useState(false);
 
   useEffect(() => {
     setLocalValue(value);
   }, [value]);
+
+  useEffect(() => {
+    if (!isFocused && isPhoneNumber && localValue.replace(/[^\d]/g, '').length < 10) {
+      const completedNumber = completePhoneNumberIfNeeded(localValue);
+      setLocalValue(completedNumber);
+      onSave(completedNumber);
+    }
+  }, [isFocused]);
 
   const completePhoneNumberIfNeeded = (text) => {
     let digits = text.replace(/[^\d]/g, '');
@@ -24,17 +33,6 @@ const EditNumberInput = ({ value, onSave, placeholder, keyboardType = 'default',
         return `(${g1}`;
       }
     });
-  };
-
-  const handleSave = () => {
-    if (isPhoneNumber && localValue.replace(/[^\d]/g, '').length < 10) {
-      const completedNumber = completePhoneNumberIfNeeded(localValue);
-      setLocalValue(completedNumber);
-      onSave(completedNumber);
-    } else {
-      onSave(localValue);
-    }
-    setEditable(false);
   };
 
   const handleTextChange = (text) => {
@@ -65,8 +63,11 @@ const EditNumberInput = ({ value, onSave, placeholder, keyboardType = 'default',
         value={localValue}
         placeholder={placeholder}
         keyboardType={keyboardType}
-        onBlur={handleSave} // Save and potentially autofill on losing focus
-        onFocus={() => setEditable(true)}
+        onBlur={() => setIsFocused(false)}
+        onFocus={() => {
+          setIsFocused(true);
+          setEditable(true);
+        }}
         style={[styles.textInput, { color: editable ? 'black' : 'grey' }]}
       />
       <Ionicons
