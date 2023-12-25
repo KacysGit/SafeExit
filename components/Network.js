@@ -14,26 +14,47 @@ const Network = ({ onUpdateContacts, onCustomMessageChange, onBack }) => {
         onCustomMessageChange(text); // Propagate to parent component
     };
 
+    const isValidPhoneNumber = (number) => {
+        const phoneNumberPattern = /^\d{10}$/; // Adjust the regex according to the format you need
+        return phoneNumberPattern.test(number);
+      };
     
-    const handleTextChange = (name, value) => {
-        setNewContact({ ...newContact, [name]: value });
-    };
-  
-  
-    const addOrUpdateContact = () => {
+      const isMessageValid = (message) => {
+        return message.length >= 10; // Check for minimum length
+      };
+    
+      const addOrUpdateContact = () => {
+        // Check for valid phone number
+        if (!isValidPhoneNumber(newContact.number)) {
+          Alert.alert("Invalid Phone Number", "Please enter a valid 10-digit phone number.");
+          return;
+        }
+      
+        // Check for valid custom message length
+        if (!isMessageValid(customMessage)) {
+          Alert.alert("Invalid Message", "The custom message must be at least 10 characters long.");
+          return;
+        }
+      
         let updatedContacts;
         if (editingIndex >= 0) {
-            // Update contact
-            updatedContacts = [...contacts];
-            updatedContacts[editingIndex] = newContact;
+          // Update contact
+          updatedContacts = [...contacts];
+          updatedContacts[editingIndex] = newContact;
         } else {
-            // Add new contact
-            updatedContacts = [...contacts, newContact];
+          // Add new contact
+          updatedContacts = [...contacts, newContact];
         }
         setContacts(updatedContacts);
         onUpdateContacts(updatedContacts); // Notify parent component of update
         setNewContact({ name: '', number: '' }); // Reset input fields
         setEditingIndex(-1); // Reset editing index
+      };
+      
+
+    
+    const handleTextChange = (name, value) => {
+        setNewContact({ ...newContact, [name]: value });
     };
 
     const [editingIndex, setEditingIndex] = useState(-1); // -1 when not editing
