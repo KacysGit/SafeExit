@@ -88,6 +88,10 @@ export default function App() {
         <Network
           onUpdateContacts={handleContactsUpdate}
           onCustomMessageChange={setCustomMessage}
+          onBack={() => {
+            // Define what should happen when back is pressed. For example:
+            setShowNetwork(false);
+          }}
         />
       ) : (
         // Main content
