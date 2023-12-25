@@ -9,7 +9,7 @@ import Header from './components/header';
 import Counter from './components/Counter';
 import CancelButton from './components/CancelButton'; // cancels the call after it's been triggered
 import useVolumeControl from './hooks/useVolumeControl'; // Import custom hook
-
+import Network from './components/Network';
 
 export default function App() {
   const {
@@ -30,6 +30,8 @@ export default function App() {
     setStartCountdown, // Use this from useAppState
     initialDelay,
     setInitialDelay,
+    customMessage,
+    setCustomMessage,
   } = useAppState();
 
   useVolumeControl(handleFakeCallTrigger);
@@ -44,6 +46,22 @@ export default function App() {
     setShowFakeCall(true);
     setStartCountdown(false); // Ensure this is set to false when the countdown completes
   };
+
+  const [contactsList, setContactsList] = useState([]); // State to hold contacts
+
+  // Function to handle updates to the contacts list
+  const handleContactsUpdate = (updatedContacts) => {
+    setContactsList(updatedContacts);
+    // Additional logic to handle the updated contacts
+  };
+  
+  const [showNetwork, setShowNetwork] = useState(false);
+  const toggleNetwork = () => setShowNetwork(!showNetwork);
+
+  const sendCustomMessage = (contact, message) => {
+    // Implement the logic to send the custom message to the contact
+    // For example, an API call, or any other logic
+  };
   
 
 
@@ -55,35 +73,36 @@ export default function App() {
       // Otherwise, start the countdown
       setStartCountdown(true);
     }
+    contactsList.forEach(contact => {
+      sendCustomMessage(contact, customMessage); // Implement this function
+  });
   };
   
 
   return (
     <View style={styles.container}>
-      {showCustomizeCall ? (
-        <CustomizeCall
-        onCustomize={setCallerInfo}
-        onBack={() => toggleCustomizeCall(false)}
-        callerInfo={callerInfo}
-        setCallDelay={setCallDelay}
-        currentDelay={delay}
-        resetCountdown={() => {
-          setStartCountdown(false);
-          setInitialDelay(0);
-        }}
-      />
-      
-      ) : showAnswerCall ? (
-        <AnswerCallScreen callerInfo={callerInfo} onHangUp={resetToHomeScreen} />
-      ) : showFakeCall ? (
-        <FakeCallScreen callerInfo={callerInfo} onHangUp={() => toggleFakeCall(false)} onAccept={() => toggleAnswerCall(true)} />
+
+      {/* Render the network view or the main content based on the showNetwork state */}
+      {showNetwork ? (
+        // Network view
+        <Network
+          onUpdateContacts={handleContactsUpdate}
+          onCustomMessageChange={setCustomMessage}
+        />
       ) : (
+        // Main content
         <>
           <Header />
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.button} onPress={() => toggleCustomizeCall(true)}>
               <Text style={styles.buttonText}>Customize Call</Text>
             </TouchableOpacity>
+            
+            {/* Button to open Network component */}
+            <TouchableOpacity style={styles.button} onPress={toggleNetwork}>
+              <Text style={styles.buttonText}>View Network</Text>
+            </TouchableOpacity>
+            
             <TouchableOpacity style={styles.button} onPress={handleFakeCallTrigger}>
               <Text style={styles.buttonText}>Call</Text>
             </TouchableOpacity>
@@ -96,20 +115,52 @@ export default function App() {
               startCountdown={startCountdown}
             />
           )}
+
+          {/* Only show CancelButton on the main screen and when a call is being delayed */}
+          {startCountdown && !showFakeCall && !showCustomizeCall && (
+            <CancelButton
+              setShowFakeCall={setShowFakeCall}
+              setStartCountdown={setStartCountdown}
+              setInitialDelay={setInitialDelay}
+              initialDelay={initialDelay}
+            />
+          )}
         </>
       )}
 
-      {/* Only show CancelButton on the main screen and when a call is being delayed */}
-      {startCountdown && !showFakeCall && !showCustomizeCall && (
-        <CancelButton
-          setShowFakeCall={setShowFakeCall}
-          setStartCountdown={setStartCountdown}
-          setInitialDelay={setInitialDelay}
-          initialDelay={initialDelay}
+      {/* Conditional rendering for the CustomizeCall, AnswerCallScreen, and FakeCallScreen */}
+      {showCustomizeCall && (
+        <CustomizeCall
+          onCustomize={setCallerInfo}
+          onBack={() => toggleCustomizeCall(false)}
+          callerInfo={callerInfo}
+          setCallDelay={setCallDelay}
+          currentDelay={delay}
+          resetCountdown={() => {
+            setStartCountdown(false);
+            setInitialDelay(0);
+          }}
         />
       )}
+
+      {showAnswerCall && (
+        <AnswerCallScreen
+          callerInfo={callerInfo}
+          onHangUp={resetToHomeScreen}
+        />
+      )}
+
+      {showFakeCall && (
+        <FakeCallScreen
+          callerInfo={callerInfo}
+          onHangUp={() => toggleFakeCall(false)}
+          onAccept={() => toggleAnswerCall(true)}
+        />
+      )}
+
     </View>
   );
+
 
 }
 
