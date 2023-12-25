@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import useAppState from './hooks/useAppState'; // Custom hook for managing app state
 
@@ -8,6 +8,7 @@ import AnswerCallScreen from './Views/AnswerCallScreen';
 import Header from './components/header';
 import Counter from './components/Counter';
 import CancelButton from './components/CancelButton'; // cancels the call after it's been triggered
+import VolumeControl, { VolumeControlEvents } from 'react-native-volume-control';
 
 
 export default function App() {
@@ -42,7 +43,42 @@ export default function App() {
     setStartCountdown(false); // Ensure this is set to false when the countdown completes
   };
   
+  useEffect(() => {
+    const volumeListener = VolumeControlEvents.addListener(
+      'VolumeChanged',
+      handleVolumeChange
+    );
+  
+    return () => {
+      volumeListener.remove();
+    };
+  }, []);
 
+  const [volumeSequence, setVolumeSequence] = useState('');
+
+  let previousVolume = 0;
+
+  const handleVolumeChange = (event) => {
+    // Implement logic to detect specific pattern of volume changes
+    // Trigger fake call when pattern is detected
+    
+    let newSequence = volumeSequence;
+    if (event.volume > previousVolume) {
+      newSequence += 'I';
+    } else if (event.volume < previousVolume) {
+      newSequence += 'D';
+    }
+  
+    if (newSequence.endsWith('IDI')) {
+      handleFakeCallTrigger();
+      newSequence = ''; // Reset the sequence
+    }
+  
+    setVolumeSequence(newSequence);
+    previousVolume = event.volume; // Update previous volume
+  };
+    
+  
 
   const handleFakeCallTrigger = () => {
     if (delay === 0) {
