@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
+import { ScrollView, View, TextInput, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
 import BackButton from './backButton';
 import { commonStyles } from './styles';
 import Header from './header';
+import Icon from 'react-native-vector-icons/FontAwesome'; // or any other icon set
 
 const Network = ({ onUpdateContacts, onCustomMessageChange, onBack }) => {
     const [contacts, setContacts] = useState([]);
@@ -15,19 +16,25 @@ const Network = ({ onUpdateContacts, onCustomMessageChange, onBack }) => {
     };
 
     const isValidPhoneNumber = (number) => {
-        const phoneNumberPattern = /^\d{10}$/; // Adjust the regex according to the format you need
-        return phoneNumberPattern.test(number);
-      };
+        // Strip out non-digits
+        const digits = number.replace(/\D/g, '');
+        // Check if the number has 10 digits
+        return /^\d{10}$/.test(digits);
+    };
+    
     
       const isMessageValid = (message) => {
         return message.length >= 10; // Check for minimum length
       };
     
       const addOrUpdateContact = () => {
+        // Extract just the digits from the phone number for validation and storage
+        const plainNumber = newContact.number.replace(/\D/g, '');
+    
         // Check for valid phone number
-        if (!isValidPhoneNumber(newContact.number)) {
-          Alert.alert("Invalid Phone Number", "Please enter a valid 10-digit phone number.");
-          return;
+        if (!isValidPhoneNumber(plainNumber)) {
+            Alert.alert("Invalid Phone Number", "Please enter a valid 10-digit phone number.");
+            return;
         }
       
         // Check for valid custom message length
@@ -52,10 +59,30 @@ const Network = ({ onUpdateContacts, onCustomMessageChange, onBack }) => {
       };
       
 
-    
-    const handleTextChange = (name, value) => {
-        setNewContact({ ...newContact, [name]: value });
-    };
+      const handleTextChange = (name, value) => {
+        if (name === 'number') {
+          // Remove all non-digits and limit the input to 10 digits
+          let cleaned = value.replace(/\D/g, '').substring(0, 10);
+          
+          // Apply the formatting (###) ###-####
+          let formatted = cleaned;
+          if (cleaned.length > 6) {
+            formatted = `(${cleaned.substring(0, 3)}) ${cleaned.substring(3, 6)}-${cleaned.substring(6)}`;
+          } else if (cleaned.length > 3) {
+            formatted = `(${cleaned.substring(0, 3)}) ${cleaned.substring(3)}`;
+          } else if (cleaned.length > 0) {
+            formatted = `(${cleaned}`;
+          }
+          
+          // Update the state with the formatted number
+          setNewContact({ ...newContact, number: formatted });
+        } else {
+          // For other fields, no special formatting is required
+          setNewContact({ ...newContact, [name]: value });
+        }
+      };
+      
+      
 
     const [editingIndex, setEditingIndex] = useState(-1); // -1 when not editing
 
@@ -80,55 +107,66 @@ const Network = ({ onUpdateContacts, onCustomMessageChange, onBack }) => {
     };
     
 
-  // Render UI for adding contacts and listing them
-  return (
-    <View style={styles.container}>
-        <Header />
-        <TextInput
-            placeholder="Name"
-            value={newContact.name}
-            onChangeText={(text) => handleTextChange('name', text)}
-            style={styles.input} // Apply styles for TextInput
-        />
-        <TextInput
-            placeholder="Phone Number"
-            value={newContact.number}
-            onChangeText={(text) => handleTextChange('number', text)}
-            style={styles.input} // Apply styles for TextInput
-        />
-        <TextInput
-            placeholder="Custom Message"
-            value={customMessage}
-            onChangeText={handleCustomMessageChange}
-            style={styles.input} // Apply styles for TextInput
-        />
-        <TouchableOpacity style={styles.addButton} onPress={addOrUpdateContact}>
-                <Text style={styles.buttonText}>{editingIndex >= 0 ? 'Save Changes' : 'Add Contact'}</Text>
-            </TouchableOpacity>
-            {/* List of contacts with edit and delete options */}
-            {contacts.map((contact, index) => (
-                <View key={index} style={styles.contactContainer}>
-                    <Text style={styles.contactText}>{contact.name} - {contact.number}</Text>
-                    <TouchableOpacity onPress={() => startEditing(index)} style={styles.editButton}>
-                        <Text style={styles.buttonText}>Edit</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => deleteContact(index)} style={styles.deleteButton}>
-                        <Text style={styles.buttonText}>Delete</Text>
-                    </TouchableOpacity>
-                </View>
-            ))}
-        <View style={commonStyles.footer}>
-            <BackButton onPress={onBack} />
+    return (
+        <View style={styles.container}>
+            <Header />
+            <ScrollView style={styles.scrollView}>
+                <TextInput
+                    placeholder="Name"
+                    value={newContact.name}
+                    onChangeText={(text) => handleTextChange('name', text)}
+                    style={styles.input}
+                />
+                <TextInput
+                    placeholder="Phone Number"
+                    value={newContact.number}
+                    onChangeText={(text) => handleTextChange('number', text)}
+                    keyboardType="numeric"
+                    style={styles.input}
+                />
+                <TextInput
+                    placeholder="Custom Message"
+                    value={customMessage}
+                    onChangeText={handleCustomMessageChange}
+                    style={styles.input}
+                />
+                <TouchableOpacity style={styles.addButton} onPress={addOrUpdateContact}>
+                    <Text style={styles.buttonText}>{editingIndex >= 0 ? 'Save Changes' : 'Add Contact'}</Text>
+                </TouchableOpacity>
+                {/* List of contacts with edit and delete options */}
+                {contacts.map((contact, index) => (
+                    <View key={index} style={styles.contactContainer}>
+                        <View style={styles.contactInfo}>
+                            <Text style={styles.contactText}>{contact.name} - {contact.number}</Text>
+                            {/* Display custom message next to each contact */}
+                            <Text style={styles.customMessage}>{customMessage}</Text>
+                        </View>
+                        <View style={styles.contactActions}>
+                        <TouchableOpacity onPress={() => startEditing(index)} style={styles.editButton}>
+                            <Icon name="pencil" size={30} color="white" />
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => deleteContact(index)} style={styles.editButton}>
+                            <Icon name="trash" size={30} color="white" />
+                        </TouchableOpacity>
+                        </View>
+                    </View>
+                ))}
+            </ScrollView>
+            <View style={commonStyles.footer}>
+                <BackButton onPress={onBack} />
+            </View>
         </View>
-    </View>
-);
+    );
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "black",
-        padding: 10, // Add padding for the overall container
+        padding: 10,
+    },
+    scrollView: {
+        flex: 1,
     },
     input: {
         backgroundColor: 'white',
@@ -146,6 +184,11 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         marginTop: 10,
     },
+    editButton: {
+        padding: 10,
+        borderRadius: 5,
+        marginLeft: 5, // Space between edit and delete buttons
+      },
     buttonText: {
         color: 'white',
         fontSize: 20,
@@ -154,6 +197,28 @@ const styles = StyleSheet.create({
         color: 'white', // Or any other color
         fontSize: 16,
         marginVertical: 5,
+    },
+    customMessage: {
+        color: 'white', // Or any other color you prefer
+        fontSize: 14,
+    },
+    contactActions: {
+        flexDirection: 'row',
+        // ... any additional styles
+    },
+    
+    contactContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: '#222',
+        padding: 10,
+        borderRadius: 5,
+        marginTop: 30
+    },
+    contactInfo: {
+        flex: 1,
+        marginRight: 10, // Add some space between text and buttons
     },
 });
 
