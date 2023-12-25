@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { View, TextInput, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
 import BackButton from './backButton';
 import { commonStyles } from './styles';
 import Header from './header';
@@ -25,6 +25,44 @@ const Network = ({ onUpdateContacts, onCustomMessageChange, onBack }) => {
       setContacts(updatedContacts);
       onUpdateContacts(updatedContacts); // Update contacts in the parent component
       setNewContact({ name: '', number: '' }); // Reset after adding
+    };
+
+    const [editingIndex, setEditingIndex] = useState(-1); // -1 when not editing
+
+    const addOrUpdateContact = () => {
+        let updatedContacts;
+        if (editingIndex >= 0) {
+            // Update contact
+            updatedContacts = [...contacts];
+            updatedContacts[editingIndex] = newContact;
+        } else {
+            // Add new contact
+            updatedContacts = [...contacts, newContact];
+        }
+        setContacts(updatedContacts);
+        onUpdateContacts(updatedContacts);
+        setNewContact({ name: '', number: '' });
+        setEditingIndex(-1);
+    };
+
+    const startEditing = (index) => {
+        setNewContact(contacts[index]);
+        setEditingIndex(index);
+    };
+
+    const deleteContact = (index) => {
+        Alert.alert(
+            "Delete Contact",
+            "Are you sure you want to delete this contact?",
+            [
+                { text: "Cancel", style: "cancel" },
+                { text: "Delete", onPress: () => {
+                    const updatedContacts = contacts.filter((_, i) => i !== index);
+                    setContacts(updatedContacts);
+                    onUpdateContacts(updatedContacts);
+                }, style: 'destructive' }
+            ]
+        );
     };
     
 
@@ -56,6 +94,18 @@ const Network = ({ onUpdateContacts, onCustomMessageChange, onBack }) => {
         {contacts.map((contact, index) => (
             <Text key={index} style={styles.contactText}>{contact.name} - {contact.number}</Text>
         ))}
+
+            {contacts.map((contact, index) => (
+                <View key={index} style={styles.contactContainer}>
+                    <Text style={styles.contactText}>{contact.name} - {contact.number}</Text>
+                    <TouchableOpacity onPress={() => startEditing(index)} style={styles.editButton}>
+                        <Text style={styles.buttonText}>Edit</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => deleteContact(index)} style={styles.deleteButton}>
+                        <Text style={styles.buttonText}>Delete</Text>
+                    </TouchableOpacity>
+                </View>
+            ))}
         <View style={commonStyles.footer}>
             <BackButton onPress={onBack} />
         </View>
@@ -78,7 +128,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
     addButton: {
-        backgroundColor: 'blue', // Choose your color
+        backgroundColor: 'red', // Choose your color
         padding: 10,
         justifyContent: 'center',
         alignItems: 'center',
