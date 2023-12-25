@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text, StyleSheet } from 'react-native';
+import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import BackButton from './backButton';
 import { commonStyles } from './styles';
 import Header from './header';
@@ -32,55 +32,68 @@ const Network = ({ onUpdateContacts, onCustomMessageChange, onBack }) => {
   return (
     <View style={styles.container}>
         <Header />
-      <TextInput
-        placeholder="Name"
-        value={newContact.name}
-        onChangeText={(text) => handleTextChange('name', text)}
-      />
-      <TextInput
-        placeholder="Phone Number"
-        value={newContact.number}
-        onChangeText={(text) => handleTextChange('number', text)}
-      />
-      <TextInput
-        placeholder="Custom Message"
-        value={customMessage}
-        onChangeText={handleCustomMessageChange}
-      />
-      <Button title="Add Contact" onPress={addContact} />
-      {contacts.map((contact, index) => (
-        <Text key={index}>{contact.name} - {contact.number}</Text>
-      ))}
-      <View style={commonStyles.footer}>
-        <BackButton onPress={onBack} />
-      </View>
+        <TextInput
+            placeholder="Name"
+            value={newContact.name}
+            onChangeText={(text) => handleTextChange('name', text)}
+            style={styles.input} // Apply styles for TextInput
+        />
+        <TextInput
+            placeholder="Phone Number"
+            value={newContact.number}
+            onChangeText={(text) => handleTextChange('number', text)}
+            style={styles.input} // Apply styles for TextInput
+        />
+        <TextInput
+            placeholder="Custom Message"
+            value={customMessage}
+            onChangeText={handleCustomMessageChange}
+            style={styles.input} // Apply styles for TextInput
+        />
+        <TouchableOpacity style={styles.addButton} onPress={addContact}>
+            <Text style={styles.buttonText}>Add Contact</Text>
+        </TouchableOpacity>
+        {contacts.map((contact, index) => (
+            <Text key={index} style={styles.contactText}>{contact.name} - {contact.number}</Text>
+        ))}
+        <View style={commonStyles.footer}>
+            <BackButton onPress={onBack} />
+        </View>
     </View>
-  );
+);
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "black",
-        display: "flex",
-      },
-      buttonContainer: {
-        alignItems: 'center', // This will horizontally center your buttons within this container
-        marginTop: 20
-      },
-      button: {
-        marginVertical: 10, // Vertical margin for spacing between buttons
+        padding: 10, // Add padding for the overall container
+    },
+    input: {
+        backgroundColor: 'white',
+        color: 'black',
+        height: 40,
+        marginVertical: 10,
+        paddingHorizontal: 10,
+        borderRadius: 5,
+    },
+    addButton: {
+        backgroundColor: 'blue', // Choose your color
         padding: 10,
-        borderWidth: 2,
-        borderRadius: 10,
-        backgroundColor: "red",
-        width: '80%', // Set a specific width for the buttons
-      },
-      buttonText: {
-        fontSize: 30,
-        textAlign: "center",
-        color: "white",
-      },
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5,
+        marginTop: 10,
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 20,
+    },
+    contactText: {
+        color: 'white', // Or any other color
+        fontSize: 16,
+        marginVertical: 5,
+    },
 });
 
 export default Network;
