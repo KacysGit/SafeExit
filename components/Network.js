@@ -6,9 +6,9 @@ import Header from './header';
 import Icon from 'react-native-vector-icons/FontAwesome'; // or any other icon set
 
 const Network = ({ onUpdateContacts, onCustomMessageChange, onBack }) => {
-    const [contacts, setContacts] = useState([]);
-    const [newContact, setNewContact] = useState({ name: '', number: '' });
     const [customMessage, setCustomMessage] = useState('');
+    const [contacts, setContacts] = useState([]);
+    const [newContact, setNewContact] = useState({ name: '', number: '', customMessage: '' });
 
     const handleCustomMessageChange = (text) => {
         setCustomMessage(text); // Local state update
@@ -37,29 +37,31 @@ const Network = ({ onUpdateContacts, onCustomMessageChange, onBack }) => {
             return;
         }
       
-        // Check for valid custom message length
-        if (!isMessageValid(customMessage)) {
+        // Check for valid custom message length for the new contact
+        if (!isMessageValid(newContact.customMessage)) {
           Alert.alert("Invalid Message", "The custom message must be at least 10 characters long.");
           return;
         }
       
         let updatedContacts;
         if (editingIndex >= 0) {
-          // Update contact
-          updatedContacts = [...contacts];
-          updatedContacts[editingIndex] = newContact;
+            // Update contact
+            updatedContacts = [...contacts];
+            updatedContacts[editingIndex] = newContact;
         } else {
-          // Add new contact
-          updatedContacts = [...contacts, newContact];
+            // Add new contact
+            updatedContacts = [...contacts, newContact];
         }
         setContacts(updatedContacts);
-        onUpdateContacts(updatedContacts); // Notify parent component of update
-        setNewContact({ name: '', number: '' }); // Reset input fields
-        setEditingIndex(-1); // Reset editing index
-      };
-      
+        onUpdateContacts(updatedContacts); 
+        setNewContact({ name: '', number: '', customMessage: '' }); // Reset input fields
+        setEditingIndex(-1);
+    };
+    
 
       const handleTextChange = (name, value) => {
+        // Update the newContact state based on the input name
+        setNewContact({ ...newContact, [name]: value });
         if (name === 'number') {
           // Remove all non-digits and limit the input to 10 digits
           let cleaned = value.replace(/\D/g, '').substring(0, 10);
@@ -126,8 +128,8 @@ const Network = ({ onUpdateContacts, onCustomMessageChange, onBack }) => {
                 />
                 <TextInput
                     placeholder="Custom Message"
-                    value={customMessage}
-                    onChangeText={handleCustomMessageChange}
+                    value={newContact.customMessage}
+                    onChangeText={(text) => handleTextChange('customMessage', text)}
                     style={styles.input}
                 />
                 <TouchableOpacity style={styles.addButton} onPress={addOrUpdateContact}>
@@ -138,8 +140,7 @@ const Network = ({ onUpdateContacts, onCustomMessageChange, onBack }) => {
                     <View key={index} style={styles.contactContainer}>
                         <View style={styles.contactInfo}>
                             <Text style={styles.contactText}>{contact.name} - {contact.number}</Text>
-                            {/* Display custom message next to each contact */}
-                            <Text style={styles.customMessage}>{customMessage}</Text>
+                            <Text style={styles.customMessage}>{contact.customMessage}</Text>
                         </View>
                         <View style={styles.contactActions}>
                         <TouchableOpacity onPress={() => startEditing(index)} style={styles.editButton}>
