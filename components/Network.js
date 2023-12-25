@@ -20,15 +20,6 @@ const Network = ({ onUpdateContacts, onCustomMessageChange, onBack }) => {
     };
   
   
-    const addContact = () => {
-      const updatedContacts = [...contacts, newContact];
-      setContacts(updatedContacts);
-      onUpdateContacts(updatedContacts); // Update contacts in the parent component
-      setNewContact({ name: '', number: '' }); // Reset after adding
-    };
-
-    const [editingIndex, setEditingIndex] = useState(-1); // -1 when not editing
-
     const addOrUpdateContact = () => {
         let updatedContacts;
         if (editingIndex >= 0) {
@@ -40,10 +31,12 @@ const Network = ({ onUpdateContacts, onCustomMessageChange, onBack }) => {
             updatedContacts = [...contacts, newContact];
         }
         setContacts(updatedContacts);
-        onUpdateContacts(updatedContacts);
-        setNewContact({ name: '', number: '' });
-        setEditingIndex(-1);
+        onUpdateContacts(updatedContacts); // Notify parent component of update
+        setNewContact({ name: '', number: '' }); // Reset input fields
+        setEditingIndex(-1); // Reset editing index
     };
+
+    const [editingIndex, setEditingIndex] = useState(-1); // -1 when not editing
 
     const startEditing = (index) => {
         setNewContact(contacts[index]);
@@ -88,13 +81,10 @@ const Network = ({ onUpdateContacts, onCustomMessageChange, onBack }) => {
             onChangeText={handleCustomMessageChange}
             style={styles.input} // Apply styles for TextInput
         />
-        <TouchableOpacity style={styles.addButton} onPress={addContact}>
-            <Text style={styles.buttonText}>Add Contact</Text>
-        </TouchableOpacity>
-        {contacts.map((contact, index) => (
-            <Text key={index} style={styles.contactText}>{contact.name} - {contact.number}</Text>
-        ))}
-
+        <TouchableOpacity style={styles.addButton} onPress={addOrUpdateContact}>
+                <Text style={styles.buttonText}>{editingIndex >= 0 ? 'Save Changes' : 'Add Contact'}</Text>
+            </TouchableOpacity>
+            {/* List of contacts with edit and delete options */}
             {contacts.map((contact, index) => (
                 <View key={index} style={styles.contactContainer}>
                     <Text style={styles.contactText}>{contact.name} - {contact.number}</Text>
