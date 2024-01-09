@@ -30,6 +30,11 @@ const Network = ({ onUpdateContacts, onCustomMessageChange, onBack }) => {
       const addOrUpdateContact = () => {
         // Extract just the digits from the phone number for validation and storage
         const plainNumber = newContact.number.replace(/\D/g, '');
+
+        if (contacts.length >= 3 && editingIndex === -1) {
+            Alert.alert("Limit Reached", "You can only add up to 3 people in your network.");
+            return;
+        }
     
         // Check for valid phone number
         if (!isValidPhoneNumber(plainNumber)) {
