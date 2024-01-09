@@ -117,7 +117,11 @@ const Network = ({ onUpdateContacts, onCustomMessageChange, onBack }) => {
     return (
         <View style={styles.container}>
             <Header />
+            
             <ScrollView style={styles.scrollView}>
+            <Text style={styles.definition}>
+                Create a safety network by adding up to three contacts. They'll receive your custom message automatically when you activate the app.
+            </Text>
                 <TextInput
                     placeholder="Name"
                     value={newContact.name}
@@ -213,6 +217,14 @@ const styles = StyleSheet.create({
         // ... any additional styles
     },
     
+    definition: {
+        color: "white",
+        fontSize: 16, // Increased font size for better readability
+        padding: 15, // Add padding for better spacing
+        textAlign: 'center', // Center-align text
+        fontWeight: 'bold', // Make the font bold
+        marginBottom: 20, // Add some margin at the bottom
+    },
     contactContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
