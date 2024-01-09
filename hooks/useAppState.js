@@ -10,6 +10,7 @@ const useAppState = () => {
   const [startCountdown, setStartCountdown] = useState(false);
   const [delay, setDelay] = useState(0);
   const [initialDelay, setInitialDelay] = useState(0);
+  const [customMessage, setCustomMessage] = useState('');
 
   // Update setCallDelay to also update initialDelay
   const setCallDelay = (value) => {
@@ -40,6 +41,8 @@ const useAppState = () => {
     setStartCountdown,
     initialDelay,
     setInitialDelay,
+    customMessage,
+    setCustomMessage,
   };
 };
 

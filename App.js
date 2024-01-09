@@ -9,7 +9,7 @@ import Header from './components/header';
 import Counter from './components/Counter';
 import CancelButton from './components/CancelButton'; // cancels the call after it's been triggered
 import useVolumeControl from './hooks/useVolumeControl'; // Import custom hook
-
+import Network from './components/Network';
 
 export default function App() {
   const {
@@ -45,7 +45,27 @@ export default function App() {
     setStartCountdown(false); // Ensure this is set to false when the countdown completes
   };
   
+  // View Network Shtuff
+  // New state for showing the Network component
+  const [showNetwork, setShowNetwork] = useState(false);
 
+  // Function to toggle Network visibility
+  const toggleNetwork = () => {
+    setShowNetwork(!showNetwork);
+  };
+
+  const [contactsList, setContactsList] = useState([]); // State to hold contacts
+
+  // Function to handle updates to the contacts list
+  const handleContactsUpdate = (updatedContacts) => {
+    setContactsList(updatedContacts);
+    // Additional logic to handle the updated contacts
+  };
+
+  const setCustomMessage = (contact, message) => {
+    // Implement the logic to send the custom message to the contact
+    // For example, an API call, or any other logic
+  };
 
   const handleFakeCallTrigger = () => {
     if (delay === 0) {
@@ -77,6 +97,15 @@ export default function App() {
         <AnswerCallScreen callerInfo={callerInfo} onHangUp={resetToHomeScreen} />
       ) : showFakeCall ? (
         <FakeCallScreen callerInfo={callerInfo} onHangUp={() => toggleFakeCall(false)} onAccept={() => toggleAnswerCall(true)} />
+      ) : showNetwork ? (
+        <Network
+          onUpdateContacts={handleContactsUpdate}
+          onCustomMessageChange={setCustomMessage}
+          onBack={() => {
+            // Define what should happen when back is pressed. For example:
+            setShowNetwork(false);
+          }}
+        /> 
       ) : (
         <>
           <Header />
@@ -84,6 +113,12 @@ export default function App() {
             <TouchableOpacity style={styles.button} onPress={() => toggleCustomizeCall(true)}>
               <Text style={styles.buttonText}>Customize Call</Text>
             </TouchableOpacity>
+
+            {/* View Network Button */}
+            <TouchableOpacity style={styles.button} onPress={toggleNetwork}>
+              <Text style={styles.buttonText}>View Network</Text>
+            </TouchableOpacity>
+
             <TouchableOpacity style={styles.button} onPress={handleFakeCallTrigger}>
               <Text style={styles.buttonText}>Call</Text>
             </TouchableOpacity>
@@ -112,6 +147,7 @@ export default function App() {
   );
 
 }
+
 
 
 
