@@ -4,31 +4,28 @@ import { View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 const EditableTextInput = ({ value, onSave, placeholder, keyboardType = 'default', style }) => {
-  const [isEditable, setEditable] = useState(false);
   const [localValue, setLocalValue] = useState(value);
 
   useEffect(() => {
     setLocalValue(value);
   }, [value]);
 
-  const handleSave = () => {
-    onSave(localValue);
-    setEditable(false);
+  const handleChange = (newValue) => {
+    setLocalValue(newValue);
+    onSave(newValue); // Call the onSave function with the new value
   };
 
   return (
     <View style={[styles.container, style]}>
       <TextInput
-        style={[styles.textInput, { color: isEditable ? 'black' : 'grey' }]} // Color changes based on edit mode
-        onChangeText={setLocalValue}
+        style={[styles.textInput, { color: 'black' }]} 
+        onChangeText={handleChange}
         value={localValue}
-        editable={true} // Make it editable by default
+        editable={true}
         placeholder={placeholder}
         keyboardType={keyboardType}
-        onBlur={handleSave} // Save on losing focus
-        onFocus={() => setEditable(true)} // Set edit mode when the text input is focused
       />
-      <Ionicons name="pencil" size={24} color={isEditable ? 'black' : 'grey'} />
+      <Ionicons name="pencil" size={24} color="grey" />
     </View>
   );
 };
