@@ -8,7 +8,6 @@ import AnswerCallScreen from './Views/AnswerCallScreen';
 import Header from './components/header';
 import Counter from './components/Counter';
 import CancelButton from './components/CancelButton'; // cancels the call after it's been triggered
-import useVolumeControl from './hooks/useVolumeControl'; // Import custom hook
 import Network from './components/Network';
 
 export default function App() {
@@ -31,8 +30,6 @@ export default function App() {
     initialDelay,
     setInitialDelay,
   } = useAppState();
-
-  useVolumeControl(handleFakeCallTrigger);
 
   const resetToHomeScreen = () => {
     setShowFakeCall(false);

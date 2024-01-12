@@ -20,7 +20,6 @@
     "react-native-fs": "^2.20.0",
     "react-native-picker-select": "^9.0.0",
     "react-native-sound": "^0.11.2",
-    "react-native-volume-control": "^1.0.1",
     "react-native-web": "~0.19.6"
   },
   "devDependencies": {
