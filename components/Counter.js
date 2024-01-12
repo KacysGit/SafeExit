@@ -26,6 +26,7 @@ const Counter = ({ onCountdownComplete, startCountdown, initialDelay }) => {
       
     return (
         <View style={styles.container}>
+            <Text style={styles.explanation}> Timer Set To: </Text>
             <Text style={styles.text}>{countdown}</Text>
         </View>
     );
@@ -35,12 +36,15 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: 150,
+        marginTop: 70,
     },
     text: {
         fontSize: 70,
         color: 'white',
     },
+    explanation: {
+        color: 'white'
+    }
 });
 
 export default Counter;

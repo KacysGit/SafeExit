@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text, ScrollView } from 'react-native';
 import useAppState from './hooks/useAppState'; // Custom hook for managing app state
 
 import CustomizeCall from './Views/customizeCall';
@@ -80,6 +80,8 @@ export default function App() {
 
   return (
     <View style={styles.container}>
+
+      
       {showCustomizeCall ? (
         <CustomizeCall
         onCustomize={setCallerInfo}
@@ -109,6 +111,9 @@ export default function App() {
       ) : (
         <>
           <Header />
+          <Text style={styles.definition}>
+            Use the Call button to trigger a fake phone call that you can use to safely excuse yourself from awkward or dangerous situations!
+          </Text>
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.button} onPress={() => toggleCustomizeCall(true)}>
               <Text style={styles.buttonText}>Customize Call</Text>
@@ -174,4 +179,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "white",
   },
+  definition: {
+    color: "white",
+    fontSize: 16, // Increased font size for better readability
+    padding: 15, // Add padding for better spacing
+    textAlign: 'center', // Center-align text
+    fontWeight: 'bold', // Make the font bold
+    marginBottom: 20, // Add some margin at the bottom
+},
 });
