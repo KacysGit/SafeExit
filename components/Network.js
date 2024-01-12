@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { ScrollView, View, TextInput, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { ScrollView, View, TextInput, TouchableOpacity, Text, StyleSheet, Alert, Keyboard } from 'react-native';
 import BackButton from './backButton';
 import { commonStyles } from './styles';
 import Header from './header';
@@ -9,6 +9,25 @@ const Network = ({ onUpdateContacts, onCustomMessageChange, onBack }) => {
     const [customMessage, setCustomMessage] = useState('');
     const [contacts, setContacts] = useState([]);
     const [newContact, setNewContact] = useState({ name: '', number: '', customMessage: '' });
+    const [isKeyboardVisible, setKeyboardVisible] = useState(false);
+
+    // When the keyboard is up, the footer pushes buttons out of place so this code
+    // checks to see if the keyboard is visible and will then hide the footer if true
+    useEffect(() => {
+        const keyboardDidShowListener = Keyboard.addListener(
+            'keyboardDidShow',
+            () => setKeyboardVisible(true)
+        );
+        const keyboardDidHideListener = Keyboard.addListener(
+            'keyboardDidHide',
+            () => setKeyboardVisible(false)
+        );
+
+        return () => {
+            keyboardDidHideListener.remove();
+            keyboardDidShowListener.remove();
+        };
+    }, []);
 
     const handleCustomMessageChange = (text) => {
         setCustomMessage(text); // Local state update
@@ -120,7 +139,7 @@ const Network = ({ onUpdateContacts, onCustomMessageChange, onBack }) => {
             
             <ScrollView style={styles.scrollView}>
             <Text style={styles.definition}>
-                Create a safety network by adding up to three contacts. They'll receive your custom message automatically when you activate the app.
+                Create a safety network by adding up to three contacts. They'll receive your custom message automatically when you trigger the app's call functionality.
             </Text>
                 <TextInput
                     placeholder="Name"
@@ -162,9 +181,11 @@ const Network = ({ onUpdateContacts, onCustomMessageChange, onBack }) => {
                     </View>
                 ))}
             </ScrollView>
-            <View style={commonStyles.footer}>
-                <BackButton onPress={onBack} />
-            </View>
+            {!isKeyboardVisible && (
+                <View style={commonStyles.footer}>
+                    <BackButton onPress={onBack} />
+                </View>
+            )}
         </View>
     );
 };

@@ -70,6 +70,14 @@ export const commonStyles = StyleSheet.create({
     marginVertical: 10,
     backgroundColor: 'white', // Set the background color to white for the text input
   },
+  definition: {
+    color: "white",
+    fontSize: 16, // Increased font size for better readability
+    padding: 15, // Add padding for better spacing
+    textAlign: 'center', // Center-align text
+    fontWeight: 'bold', // Make the font bold
+    marginBottom: 20, // Add some margin at the bottom
+},
 
 });
 

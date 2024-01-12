@@ -85,7 +85,10 @@ return (
       <Header />
 
       <ScrollView style={commonStyles.scrollContainer}>
-        {/* All your existing inputs and buttons go here */}
+        
+        <Text style={commonStyles.definition}>
+            Customize the caller information that is displayed when you trigger SafelyExit's call functionality.
+        </Text>
 
         {/* Editable Image */}
         <EditableImage
