@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderWidth: 2,
     borderRadius: 10,
-    backgroundColor: "red",
+    backgroundColor: "blue",
     width: '80%', // Set a specific width for the buttons
   },
   buttonText: {
